@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>2026 2학년 스포츠 페스티벌</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      background: #f5f7fb;
+      color: #222;
+      padding-bottom: 90px;
+    }
+
+    .hero {
+      padding: 55px 20px 45px;
+      text-align: center;
+      background: linear-gradient(135deg, #243b74, #4d67a5);
+      color: white;
+    }
+
+    .hero .small {
+      font-size: 14px;
+      opacity: 0.85;
+      margin-bottom: 10px;
+    }
+
+    .hero h1 {
+      font-size: 30px;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+
+    .hero h1 span {
+      color: #ffd84d;
+    }
+
+    .hero p {
+      margin-top: 10px;
+      font-size: 15px;
+      opacity: 0.95;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .notice {
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      margin-top: -22px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    .notice h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .notice p {
+      color: #666;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .section-title {
+      margin: 28px 0 15px;
+      font-size: 20px;
+    }
+
+    .schedule {
+      display: grid;
+      gap: 10px;
+    }
+
+    .schedule-item {
+      background: white;
+      padding: 16px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+    }
+
+    .time {
+      width: 115px;
+      font-weight: bold;
+      color: #405995;
+      font-size: 14px;
+    }
+
+    .event {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .ranking {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .rank-card {
+      background: white;
+      border-radius: 16px;
+      padding: 18px 10px;
+      text-align: center;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+    }
+
+    .rank-card .medal {
+      font-size: 28px;
+    }
+
+    .rank-card strong {
+      display: block;
+      margin-top: 5px;
+    }
+
+    .rank-card small {
+      color: #888;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: white;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-item {
+      text-align: center;
+      font-size: 11px;
+      color: #666;
+      cursor: pointer;
+    }
+
+    .nav-item span {
+      display: block;
+      font-size: 21px;
+      margin-bottom: 3px;
+    }
+
+    .nav-item.active {
+      color: #304c91;
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 25px;
+      }
+
+      .container {
+        padding: 15px;
+      }
+
+      .time {
+        width: 100px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="hero">
+    <div class="small">2026학년도 2학년</div>
+
+    <h1>
+      같이 <span>UP</span>, 가치 <span>UP!</span><br>
+      SPORTS FESTIVAL
+    </h1>
+
+    <p>2026. 10. 23. FRI · 아름관</p>
+  </header>
+
+  <main class="container">
+
+    <section class="notice">
+      <h2>📢 스포츠 페스티벌 안내</h2>
+      <p>
+        함께 뛰고, 함께 응원하고, 함께 즐기는 하루!<br>
+        스포츠맨십을 지키며 즐거운 스포츠 페스티벌을 만들어 주세요.
+      </p>
+    </section>
+
+    <h2 class="section-title">🏆 실시간 종합순위</h2>
+
+    <section class="ranking">
+      <div class="rank-card">
+        <div class="medal">🥇</div>
+        <strong>-</strong>
+        <small>집계 전</small>
+      </div>
+
+      <div class="rank-card">
+        <div class="medal">🥈</div>
+        <strong>-</strong>
+        <small>집계 전</small>
+      </div>
+
+      <div class="rank-card">
+        <div class="medal">🥉</div>
+        <strong>-</strong>
+        <small>집계 전</small>
+      </div>
+    </section>
+
+    <h2 class="section-title">📅 오늘의 일정</h2>
+
+    <section class="schedule">
+
+      <div class="schedule-item">
+        <div class="time">08:30 - 08:40</div>
+        <div class="event">반별 자리 배정 · 개회식 준비</div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="time">08:40 - 09:00</div>
+        <div class="event">🎉 입장식 · 개회식 · 준비운동</div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="time">09:00 - 10:10</div>
+        <div class="event">🏐 피구</div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="time">10:10 - 10:40</div>
+        <div class="event">👟 2인 3각</div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="time">10:40 - 11:20</div>
+        <div class="event">➰ 8자 줄넘기</div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="time">11:20 - 12:30</div>
+        <div class="event">🎤 장기자랑 · 보니따 공연</div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="time">12:30 - 13:30</div>
+        <div class="event">🍱 점심시간</div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="time">13:30 - 14:00</div>
+        <div class="event">💪 줄다리기</div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="time">14:00 - 14:20</div>
+        <div class="event">🏃 미션 달리기</div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="time">14:20 - 14:40</div>
+        <div class="event">🏆 점수 집계 · 결과 발표</div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <nav class="bottom-nav">
+
+    <div class="nav-item active">
+      <span>🏠</span>
+      홈
+    </div>
+
+    <div class="nav-item">
+      <span>📅</span>
+      일정
+    </div>
+
+    <div class="nav-item">
+      <span>🏆</span>
+      점수
+    </div>
+
+    <div class="nav-item">
+      <span>📋</span>
+      경기요강
+    </div>
+
+    <div class="nav-item">
+      <span>🎯</span>
+      대진·기록
+    </div>
+
+    <div class="nav-item">
+      <span>📢</span>
+      공지
+    </div>
+
+  </nav>
+
+</body>
+</html>
