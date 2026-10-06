@@ -1,321 +1,739 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>2026 2학년 스포츠 페스티벌</title>
+  <title>2026 2학년 같이 UP, 가치 UP! 스포츠 페스티벌</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, "Noto Sans KR", sans-serif;
-      background: #f5f7fb;
-      color: #222;
-      padding-bottom: 90px;
-    }
-
-    .hero {
-      padding: 55px 20px 45px;
-      text-align: center;
-      background: linear-gradient(135deg, #243b74, #4d67a5);
-      color: white;
-    }
-
-    .hero .small {
-      font-size: 14px;
-      opacity: 0.85;
-      margin-bottom: 10px;
-    }
-
-    .hero h1 {
-      font-size: 30px;
-      line-height: 1.35;
-      margin-bottom: 10px;
-    }
-
-    .hero h1 span {
-      color: #ffd84d;
-    }
-
-    .hero p {
-      margin-top: 10px;
-      font-size: 15px;
-      opacity: 0.95;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    .notice {
-      background: white;
-      border-radius: 18px;
-      padding: 20px;
-      margin-top: -22px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-    }
-
-    .notice h2 {
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
-
-    .notice p {
-      color: #666;
-      line-height: 1.6;
-      font-size: 14px;
-    }
-
-    .section-title {
-      margin: 28px 0 15px;
-      font-size: 20px;
-    }
-
-    .schedule {
-      display: grid;
-      gap: 10px;
-    }
-
-    .schedule-item {
-      background: white;
-      padding: 16px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.05);
-    }
-
-    .time {
-      width: 115px;
-      font-weight: bold;
-      color: #405995;
-      font-size: 14px;
-    }
-
-    .event {
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .ranking {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-
-    .rank-card {
-      background: white;
-      border-radius: 16px;
-      padding: 18px 10px;
-      text-align: center;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.05);
-    }
-
-    .rank-card .medal {
-      font-size: 28px;
-    }
-
-    .rank-card strong {
-      display: block;
-      margin-top: 5px;
-    }
-
-    .rank-card small {
-      color: #888;
-    }
-
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 70px;
-      background: white;
-      border-top: 1px solid #ddd;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      z-index: 100;
-    }
-
-    .nav-item {
-      text-align: center;
-      font-size: 11px;
-      color: #666;
-      cursor: pointer;
-    }
-
-    .nav-item span {
-      display: block;
-      font-size: 21px;
-      margin-bottom: 3px;
-    }
-
-    .nav-item.active {
-      color: #304c91;
-      font-weight: bold;
-    }
-
-    @media (max-width: 600px) {
-      .hero h1 {
-        font-size: 25px;
-      }
-
-      .container {
-        padding: 15px;
-      }
-
-      .time {
-        width: 100px;
-      }
-    }
-  </style>
+  <!-- 우리가 만든 디자인 파일 -->
+  <link rel="stylesheet" href="style.css">
 </head>
+
 
 <body>
 
-  <header class="hero">
-    <div class="small">2026학년도 2학년</div>
+<!-- ================================
+     상단
+================================ -->
+
+<header class="hero">
+
+  <div class="hero-content">
+
+    <div class="small">
+      2026학년도 2학년
+    </div>
 
     <h1>
       같이 <span>UP</span>, 가치 <span>UP!</span><br>
       SPORTS FESTIVAL
     </h1>
 
-    <p>2026. 10. 23. FRI · 아름관</p>
-  </header>
+    <p>
+      2026. 10. 23. FRI · 아름관
+    </p>
 
-  <main class="container">
+  </div>
 
-    <section class="notice">
-      <h2>📢 스포츠 페스티벌 안내</h2>
+</header>
+
+
+<!-- ================================
+     HOME
+================================ -->
+
+<main id="home" class="page active">
+
+  <div class="container">
+
+    <section class="card main-notice">
+
+      <div class="notice-label">
+        📢 FESTIVAL NOTICE
+      </div>
+
+      <h2>
+        2026 2학년 스포츠 페스티벌
+      </h2>
+
       <p>
         함께 뛰고, 함께 응원하고, 함께 즐기는 하루!<br>
-        스포츠맨십을 지키며 즐거운 스포츠 페스티벌을 만들어 주세요.
+        스포츠맨십을 지키며 정정당당하게 참여해 주세요.
       </p>
+
     </section>
 
-    <h2 class="section-title">🏆 실시간 종합순위</h2>
 
-    <section class="ranking">
+    <!-- TOP 3 -->
+
+    <h2 class="section-title">
+      🏆 실시간 종합순위
+    </h2>
+
+    <p class="section-subtitle">
+      경기 결과에 따라 실시간으로 변경됩니다.
+    </p>
+
+
+    <section class="ranking-top">
+
       <div class="rank-card">
-        <div class="medal">🥇</div>
-        <strong>-</strong>
-        <small>집계 전</small>
+
+        <div class="medal">
+          🥇
+        </div>
+
+        <div id="rank-1">
+          <strong>-</strong><br>
+          <small>집계 전</small>
+        </div>
+
       </div>
+
 
       <div class="rank-card">
-        <div class="medal">🥈</div>
-        <strong>-</strong>
-        <small>집계 전</small>
+
+        <div class="medal">
+          🥈
+        </div>
+
+        <div id="rank-2">
+          <strong>-</strong><br>
+          <small>집계 전</small>
+        </div>
+
       </div>
+
 
       <div class="rank-card">
-        <div class="medal">🥉</div>
-        <strong>-</strong>
-        <small>집계 전</small>
-      </div>
-    </section>
 
-    <h2 class="section-title">📅 오늘의 일정</h2>
+        <div class="medal">
+          🥉
+        </div>
 
-    <section class="schedule">
+        <div id="rank-3">
+          <strong>-</strong><br>
+          <small>집계 전</small>
+        </div>
 
-      <div class="schedule-item">
-        <div class="time">08:30 - 08:40</div>
-        <div class="event">반별 자리 배정 · 개회식 준비</div>
-      </div>
-
-      <div class="schedule-item">
-        <div class="time">08:40 - 09:00</div>
-        <div class="event">🎉 입장식 · 개회식 · 준비운동</div>
-      </div>
-
-      <div class="schedule-item">
-        <div class="time">09:00 - 10:10</div>
-        <div class="event">🏐 피구</div>
-      </div>
-
-      <div class="schedule-item">
-        <div class="time">10:10 - 10:40</div>
-        <div class="event">👟 2인 3각</div>
-      </div>
-
-      <div class="schedule-item">
-        <div class="time">10:40 - 11:20</div>
-        <div class="event">➰ 8자 줄넘기</div>
-      </div>
-
-      <div class="schedule-item">
-        <div class="time">11:20 - 12:30</div>
-        <div class="event">🎤 장기자랑 · 보니따 공연</div>
-      </div>
-
-      <div class="schedule-item">
-        <div class="time">12:30 - 13:30</div>
-        <div class="event">🍱 점심시간</div>
-      </div>
-
-      <div class="schedule-item">
-        <div class="time">13:30 - 14:00</div>
-        <div class="event">💪 줄다리기</div>
-      </div>
-
-      <div class="schedule-item">
-        <div class="time">14:00 - 14:20</div>
-        <div class="event">🏃 미션 달리기</div>
-      </div>
-
-      <div class="schedule-item">
-        <div class="time">14:20 - 14:40</div>
-        <div class="event">🏆 점수 집계 · 결과 발표</div>
       </div>
 
     </section>
 
-  </main>
 
-  <nav class="bottom-nav">
+    <!-- 주요 일정 -->
 
-    <div class="nav-item active">
-      <span>🏠</span>
-      홈
+    <h2 class="section-title">
+      ⚡ 주요 일정
+    </h2>
+
+
+    <section class="schedule-list">
+
+      <div class="schedule-item">
+        <div class="schedule-time">
+          08:40
+        </div>
+        <div class="schedule-event">
+          🎉 입장식 · 개회식
+        </div>
+      </div>
+
+
+      <div class="schedule-item">
+        <div class="schedule-time">
+          09:00
+        </div>
+        <div class="schedule-event">
+          🏐 피구
+        </div>
+      </div>
+
+
+      <div class="schedule-item">
+        <div class="schedule-time">
+          10:10
+        </div>
+        <div class="schedule-event">
+          👟 2인 3각
+        </div>
+      </div>
+
+
+      <div class="schedule-item">
+        <div class="schedule-time">
+          10:40
+        </div>
+        <div class="schedule-event">
+          ➰ 8자 줄넘기
+        </div>
+      </div>
+
+
+      <div class="schedule-item">
+        <div class="schedule-time">
+          13:30
+        </div>
+        <div class="schedule-event">
+          💪 줄다리기
+        </div>
+      </div>
+
+
+      <div class="schedule-item">
+        <div class="schedule-time">
+          14:00
+        </div>
+        <div class="schedule-event">
+          🏃 미션 달리기
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
+
+
+
+<!-- ================================
+     일정
+================================ -->
+
+<main id="schedule" class="page">
+
+  <div class="container">
+
+    <h2 class="section-title">
+      📅 스포츠 페스티벌 일정
+    </h2>
+
+    <p class="section-subtitle">
+      행사 진행 상황에 따라 시간은 변경될 수 있습니다.
+    </p>
+
+
+    <section class="schedule-list">
+
+      <div class="schedule-item">
+        <div class="schedule-time">08:30 ~ 08:40</div>
+        <div class="schedule-event">반별 자리 배정 · 개회식 준비</div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="schedule-time">08:40 ~ 09:00</div>
+        <div class="schedule-event">🎉 입장식 · 개회식 · 준비운동</div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="schedule-time">09:00 ~ 10:10</div>
+        <div class="schedule-event">🏐 피구 ①~⑧</div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="schedule-time">10:10 ~ 10:40</div>
+        <div class="schedule-event">👟 2인 3각</div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="schedule-time">10:40 ~ 11:20</div>
+        <div class="schedule-event">➰ 8자 줄넘기</div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="schedule-time">11:20 ~ 12:30</div>
+        <div class="schedule-event">🎤 장기자랑 · 보니따 공연</div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="schedule-time">12:30 ~ 13:30</div>
+        <div class="schedule-event">🍱 점심시간</div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="schedule-time">13:30 ~ 14:00</div>
+        <div class="schedule-event">💪 줄다리기</div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="schedule-time">14:00 ~ 14:20</div>
+        <div class="schedule-event">🏃 미션 달리기</div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="schedule-time">14:20 ~ 14:40</div>
+        <div class="schedule-event">🏆 점수 집계 · 결과 발표</div>
+      </div>
+
+      <div class="schedule-item">
+        <div class="schedule-time">14:40 ~</div>
+        <div class="schedule-event">🧹 주변 청소 · 반별 종례</div>
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
+
+
+
+<!-- ================================
+     실시간 점수
+================================ -->
+
+<main id="score" class="page">
+
+  <div class="container">
+
+    <h2 class="section-title">
+      🏆 실시간 종합점수
+    </h2>
+
+    <p class="section-subtitle">
+      종목별 점수와 현재 종합순위입니다.
+    </p>
+
+
+    <div class="table-wrap">
+
+      <table class="score-table">
+
+        <thead>
+
+          <tr>
+
+            <th>순위</th>
+            <th>학급</th>
+            <th>피구</th>
+            <th>미션</th>
+            <th>8자</th>
+            <th>줄다리기</th>
+            <th>2인3각</th>
+            <th>총점</th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody id="score-body">
+
+        </tbody>
+
+      </table>
+
     </div>
 
-    <div class="nav-item">
-      <span>📅</span>
-      일정
+  </div>
+
+</main>
+
+
+
+<!-- ================================
+     경기요강
+================================ -->
+
+<main id="rules" class="page">
+
+  <div class="container">
+
+    <h2 class="section-title">
+      📋 경기요강
+    </h2>
+
+    <p class="section-subtitle">
+      종목을 선택하면 경기 규칙을 확인할 수 있습니다.
+    </p>
+
+
+    <div class="sport-buttons">
+
+      <button class="sport-btn active"
+              data-sport="dodgeball">
+        🏐 피구
+      </button>
+
+      <button class="sport-btn"
+              data-sport="mission">
+        🏃 미션달리기
+      </button>
+
+      <button class="sport-btn"
+              data-sport="rope">
+        ➰ 8자 줄넘기
+      </button>
+
+      <button class="sport-btn"
+              data-sport="tug">
+        💪 줄다리기
+      </button>
+
+      <button class="sport-btn"
+              data-sport="three">
+        👟 2인 3각
+      </button>
+
     </div>
 
-    <div class="nav-item">
-      <span>🏆</span>
-      점수
+
+
+    <!-- 피구 -->
+
+    <div id="rule-dodgeball"
+         class="rule-content rule-card">
+
+      <h3>
+        🏐 피구
+      </h3>
+
+      <ul>
+        <li>선수는 학급당 15명입니다.</li>
+        <li>5분 단판 승부로 진행합니다.</li>
+        <li>결승전은 5분씩 3전 2선승제로 진행합니다.</li>
+        <li>동점일 경우 한 명이 더 아웃될 때까지 골든볼을 진행합니다.</li>
+        <li>머리 높이로 공격할 수 없습니다.</li>
+        <li>얼굴이나 머리에 맞은 경우 아웃되지 않고 공격권이 상대에게 넘어갑니다. 단, 공격을 피하다 맞은 경우는 제외합니다.</li>
+        <li>라인을 밟거나 넘어가면 오버라인으로 아웃됩니다.</li>
+        <li>패스는 3번까지 허용하며 4번째에는 반드시 공격해야 합니다.</li>
+        <li>공격권이 상대에게 넘어가기 전 한 선수당 최대 3회까지 공격할 수 있습니다.</li>
+        <li>심판의 판정에 따릅니다.</li>
+      </ul>
+
     </div>
 
-    <div class="nav-item">
-      <span>📋</span>
-      경기요강
+
+
+    <!-- 미션 달리기 -->
+
+    <div id="rule-mission"
+         class="rule-content rule-card"
+         style="display:none">
+
+      <h3>
+        🏃 미션 달리기
+      </h3>
+
+      <ul>
+        <li>선수는 학급당 5명입니다.</li>
+        <li>3학급씩 3번 경기를 진행합니다.</li>
+        <li>가장 빠른 기록을 기준으로 1위부터 9위까지 결정합니다.</li>
+        <li>1번 주자는 훌라후프를 허리로 10회 돌린 후 출발합니다.</li>
+        <li>2번 주자는 훌라후프로 양발 모아 줄넘기 10회를 성공한 후 출발합니다.</li>
+        <li>3번 주자는 훌라후프 안에서 코끼리 코 10바퀴를 돈 후 출발합니다.</li>
+        <li>4번 주자는 반환점에서 랜덤 미션지를 뽑고 해당 미션을 수행하며 골인합니다.</li>
+        <li>미션을 정확히 수행하지 않으면 주자마다 기록에 3초를 추가합니다.</li>
+      </ul>
+
     </div>
 
-    <div class="nav-item">
-      <span>🎯</span>
-      대진·기록
+
+
+    <!-- 8자 줄넘기 -->
+
+    <div id="rule-rope"
+         class="rule-content rule-card"
+         style="display:none">
+
+      <h3>
+        ➰ 8자 줄넘기
+      </h3>
+
+      <ul>
+        <li>선수는 학급당 12명입니다.</li>
+        <li>2명은 줄을 돌리고 10명은 줄넘기를 합니다.</li>
+        <li>한 명씩 줄에 들어가고 나오면서 진행합니다.</li>
+        <li>경기 시간은 1분 30초입니다.</li>
+        <li>줄의 길이는 학급별 자유입니다.</li>
+        <li>2회 실시하며 더 높은 기록을 최종 기록으로 인정합니다.</li>
+        <li>한 사람이 연속하여 넘어도 한 번만 인정합니다.</li>
+      </ul>
+
     </div>
 
-    <div class="nav-item">
-      <span>📢</span>
-      공지
+
+
+    <!-- 줄다리기 -->
+
+    <div id="rule-tug"
+         class="rule-content rule-card"
+         style="display:none">
+
+      <h3>
+        💪 줄다리기
+      </h3>
+
+      <ul>
+        <li>학급 전체가 참여합니다.</li>
+        <li>인원이 적은 학급의 인원에 맞춰 출전합니다.</li>
+        <li>토너먼트 방식으로 진행합니다.</li>
+        <li>20초씩 3전 2선승제로 진행합니다.</li>
+        <li>시작 지점에서 줄을 1m 이상 당기면 승리합니다.</li>
+      </ul>
+
     </div>
 
-  </nav>
+
+
+    <!-- 2인 3각 -->
+
+    <div id="rule-three"
+         class="rule-content rule-card"
+         style="display:none">
+
+      <h3>
+        👟 2인 3각
+      </h3>
+
+      <ul>
+        <li>선수는 학급당 8명입니다.</li>
+        <li>2인 1조로 총 4개 조가 참가합니다.</li>
+        <li>반환점을 돌아오는 릴레이 방식으로 진행합니다.</li>
+        <li>첫 번째 조의 출발부터 마지막 네 번째 조가 결승선을 통과할 때까지 시간을 측정합니다.</li>
+        <li>가장 빠른 기록을 기준으로 순위를 결정합니다.</li>
+        <li>2인 3각 기구 자체를 배턴으로 사용합니다.</li>
+      </ul>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+
+<!-- ================================
+     대진 · 기록
+================================ -->
+
+<main id="records" class="page">
+
+  <div class="container">
+
+    <h2 class="section-title">
+      🎯 대진 · 경기기록
+    </h2>
+
+    <p class="section-subtitle">
+      경기 대진과 종목별 기록을 확인할 수 있습니다.
+    </p>
+
+
+    <div class="record-card">
+
+      <h3>
+        🏐 피구
+      </h3>
+
+      <p>
+        대진표 추첨 후 공개됩니다.
+      </p>
+
+    </div>
+
+
+    <div class="record-card">
+
+      <h3>
+        💪 줄다리기
+      </h3>
+
+      <p>
+        대진표 추첨 후 공개됩니다.
+      </p>
+
+    </div>
+
+
+    <div class="record-card">
+
+      <h3>
+        👟 2인 3각
+      </h3>
+
+      <div class="record-value">
+        기록 전
+      </div>
+
+    </div>
+
+
+    <div class="record-card">
+
+      <h3>
+        ➰ 8자 줄넘기
+      </h3>
+
+      <div class="record-value">
+        기록 전
+      </div>
+
+    </div>
+
+
+    <div class="record-card">
+
+      <h3>
+        🏃 미션 달리기
+      </h3>
+
+      <div class="record-value">
+        기록 전
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+
+<!-- ================================
+     공지사항
+================================ -->
+
+<main id="notice" class="page">
+
+  <div class="container">
+
+    <h2 class="section-title">
+      📢 공지사항
+    </h2>
+
+    <p class="section-subtitle">
+      스포츠 페스티벌 운영 공지를 확인해 주세요.
+    </p>
+
+
+    <div class="notice-item">
+
+      <div class="date">
+        FESTIVAL NOTICE
+      </div>
+
+      <h3>
+        경기 전 선수 대기
+      </h3>
+
+      <p>
+        원활한 경기 진행을 위해 출전 선수는
+        경기 시작 전에 미리 대기해 주세요.
+      </p>
+
+    </div>
+
+
+    <div class="notice-item">
+
+      <div class="date">
+        FESTIVAL NOTICE
+      </div>
+
+      <h3>
+        스포츠맨십 준수
+      </h3>
+
+      <p>
+        심판의 판정을 존중하고 상대 학급을 배려하며
+        정정당당하게 경기에 참여해 주세요.
+      </p>
+
+    </div>
+
+
+    <div class="notice-item">
+
+      <div class="date">
+        FESTIVAL NOTICE
+      </div>
+
+      <h3>
+        경기 일정 안내
+      </h3>
+
+      <p>
+        행사 진행 상황에 따라 경기 시간이 변경될 수 있으므로
+        공지사항을 수시로 확인해 주세요.
+      </p>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+
+<!-- ================================
+     하단 메뉴
+================================ -->
+
+<nav class="bottom-nav">
+
+  <div class="nav-item active"
+       data-page="home">
+
+    <span>🏠</span>
+    홈
+
+  </div>
+
+
+  <div class="nav-item"
+       data-page="schedule">
+
+    <span>📅</span>
+    일정
+
+  </div>
+
+
+  <div class="nav-item"
+       data-page="score">
+
+    <span>🏆</span>
+    점수
+
+  </div>
+
+
+  <div class="nav-item"
+       data-page="rules">
+
+    <span>📋</span>
+    경기요강
+
+  </div>
+
+
+  <div class="nav-item"
+       data-page="records">
+
+    <span>🎯</span>
+    대진·기록
+
+  </div>
+
+
+  <div class="nav-item"
+       data-page="notice">
+
+    <span>📢</span>
+    공지
+
+  </div>
+
+</nav>
+
+
+<!-- 우리가 만든 기능 파일 -->
+<script src="script.js"></script>
 
 </body>
+
 </html>
