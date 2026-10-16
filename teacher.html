@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026 스포츠 페스티벌 | 교사용</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f3f6fb;
+      font-family: Arial, sans-serif;
+      color: #17243b;
+    }
+    header {
+      background: #183b73;
+      color: white;
+      padding: 24px 16px;
+      text-align: center;
+    }
+    header h1 { margin: 0 0 8px; font-size: 22px; }
+    header p { margin: 0; font-size: 14px; }
+    main { max-width: 480px; margin: 40px auto; padding: 16px; }
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 4px 20px #17243b12;
+    }
+    h2 { margin-top: 0; font-size: 20px; }
+    label { display: block; margin: 20px 0 8px; }
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      margin-top: 16px;
+      padding: 14px;
+      border: 0;
+      border-radius: 9px;
+      background: #183b73;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #message { margin-top: 16px; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>2026 SPORTS FESTIVAL</h1>
+    <p>교사용 경기 결과 입력 시스템</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>🔐 선생님 인증</h2>
+      <p>경기 결과 입력을 위해 공통 비밀번호를 입력해 주세요.</p>
+
+      <form id="loginForm">
+        <label for="password">공통 비밀번호</label>
+        <input
+          id="password"
+          type="password"
+          placeholder="비밀번호 입력"
+          autocomplete="off"
+          required
+        >
+        <button type="submit">인증하기</button>
+      </form>
+
+      <p id="message" role="status"></p>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById("loginForm").addEventListener(
+      "submit",
+      function (event) {
+        event.preventDefault();
+        document.getElementById("message").textContent =
+          "인증 화면 준비 완료! 서버 연결은 다음 단계에서 진행합니다.";
+      }
+    );
+  </script>
+</body>
+</html>
