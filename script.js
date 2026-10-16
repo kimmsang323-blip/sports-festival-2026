@@ -4,7 +4,35 @@
 ======================================== */
 
 document.addEventListener("DOMContentLoaded", function () {
+  /* =========================
+     Supabase 연결 설정
+  ========================= */
 
+  const SUPABASE_URL = "https://tdrebwaendjrwqcfforx.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_Y3k600Ij5iIlOFK8CNKhJg_WLevWGFo";
+
+  async function loadFestivalResults() {
+    try {
+      const response = await fetch(
+        `${SUPABASE_URL}/rest/v1/festival_results?select=*`,
+        {
+          headers: {
+            apikey: SUPABASE_KEY
+          }
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`조회 실패: ${response.status}`);
+      }
+
+      const results = await response.json();
+      console.log("Supabase 경기 결과:", results);
+
+    } catch (error) {
+      console.error("경기 결과 불러오기 오류:", error);
+    }
+  }
   /* =========================
      1. 하단 메뉴 화면 전환
   ========================= */
@@ -375,5 +403,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
   renderScoreTable();
   renderTop3();
-
+  loadFestivalResults();
 });
