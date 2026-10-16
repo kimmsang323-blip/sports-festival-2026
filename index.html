@@ -503,87 +503,154 @@
 <!-- ================================
      대진 · 기록
 ================================ -->
+<!-- ================================
+     대진 · 기록
+================================ -->
 
 <main id="records" class="page">
-
   <div class="container">
 
-    <h2 class="section-title">
-      🎯 대진 · 경기기록
-    </h2>
-
+    <h2 class="section-title">🎯 대진 · 경기기록</h2>
     <p class="section-subtitle">
-      경기 대진과 종목별 기록을 확인할 수 있습니다.
+      종목별 대진과 학급별 경기 순서를 확인하세요.
     </p>
 
-
-    <div class="record-card">
-
-      <h3>
-        🏐 피구
-      </h3>
-
-      <p>
-        대진표 추첨 후 공개됩니다.
-      </p>
-
+    <div class="sport-buttons" id="record-buttons">
+      <button class="sport-btn active" data-record="dodgeball">🏐 피구</button>
+      <button class="sport-btn" data-record="tug">💪 줄다리기</button>
+      <button class="sport-btn" data-record="mission">🏃 미션 달리기</button>
+      <button class="sport-btn" data-record="rope">➰ 8자 줄넘기</button>
+      <button class="sport-btn" data-record="three">👟 2인 3각</button>
     </div>
 
-
-    <div class="record-card">
-
-      <h3>
-        💪 줄다리기
-      </h3>
-
-      <p>
-        대진표 추첨 후 공개됩니다.
-      </p>
-
-    </div>
-
-
-    <div class="record-card">
-
-      <h3>
-        👟 2인 3각
-      </h3>
-
-      <div class="record-value">
-        기록 전
+    <!-- 피구 -->
+    <section class="record-panel" id="record-dodgeball">
+      <div class="record-card">
+        <h3>🏐 피구 토너먼트</h3>
+        <p>확정된 추첨 순서</p>
+        <p class="record-value" style="font-size:17px;line-height:1.9">
+          8반 → 5반 → 2반 → 9반 → 7반 → 1반 → 3반 → 4반 → 6반
+        </p>
+        <p style="color:#697386;font-size:13px;margin-top:10px">
+          실제 경기별 대진 연결 및 다음 라운드 진출표는 추가 반영 예정입니다.
+        </p>
       </div>
+    </section>
 
-    </div>
-
-
-    <div class="record-card">
-
-      <h3>
-        ➰ 8자 줄넘기
-      </h3>
-
-      <div class="record-value">
-        기록 전
+    <!-- 줄다리기 -->
+    <section class="record-panel" id="record-tug" style="display:none">
+      <div class="record-card">
+        <h3>💪 줄다리기 토너먼트</h3>
+        <p style="line-height:1.8">
+          토너먼트 대진표를 확정된 추첨 결과에 맞춰 표시할 예정입니다.
+        </p>
+        <p style="color:#697386;font-size:13px;margin-top:10px">
+          대진 연결 확인 후 경기별 상대 학급을 표시합니다.
+        </p>
       </div>
+    </section>
 
-    </div>
-
-
-    <div class="record-card">
-
-      <h3>
-        🏃 미션 달리기
-      </h3>
-
-      <div class="record-value">
-        기록 전
+    <!-- 미션 달리기 -->
+    <section class="record-panel" id="record-mission" style="display:none">
+      <div class="record-card">
+        <h3>🏃 미션 달리기 출전 순서</h3>
+        <p style="margin-bottom:14px;color:#697386;font-size:13px">
+          3개 학급씩 총 3경기
+        </p>
+        <div class="schedule-list">
+          <div class="schedule-item">
+            <div class="schedule-time">1경기</div>
+            <div class="schedule-event">1반 · 6반 · 7반</div>
+          </div>
+          <div class="schedule-item">
+            <div class="schedule-time">2경기</div>
+            <div class="schedule-event">3반 · 5반 · 8반</div>
+          </div>
+          <div class="schedule-item">
+            <div class="schedule-time">3경기</div>
+            <div class="schedule-event">9반 · 2반 · 4반</div>
+          </div>
+        </div>
       </div>
+    </section>
 
-    </div>
+    <!-- 8자 줄넘기 -->
+    <section class="record-panel" id="record-rope" style="display:none">
+      <div class="record-card">
+        <h3>➰ 8자 줄넘기 출전 순서</h3>
+        <p style="margin-bottom:14px;color:#697386;font-size:13px">
+          반 순서대로 3개 학급씩 진행
+        </p>
+        <div class="schedule-list">
+          <div class="schedule-item">
+            <div class="schedule-time">1경기</div>
+            <div class="schedule-event">1반 · 2반 · 3반</div>
+          </div>
+          <div class="schedule-item">
+            <div class="schedule-time">2경기</div>
+            <div class="schedule-event">4반 · 5반 · 6반</div>
+          </div>
+          <div class="schedule-item">
+            <div class="schedule-time">3경기</div>
+            <div class="schedule-event">7반 · 8반 · 9반</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2인 3각 -->
+    <section class="record-panel" id="record-three" style="display:none">
+      <div class="record-card">
+        <h3>👟 2인 3각 출전 순서</h3>
+        <p style="margin-bottom:14px;color:#697386;font-size:13px">
+          3개 학급씩 총 3경기
+        </p>
+        <div class="schedule-list">
+          <div class="schedule-item">
+            <div class="schedule-time">1경기</div>
+            <div class="schedule-event">2반 · 9반 · 8반</div>
+          </div>
+          <div class="schedule-item">
+            <div class="schedule-time">2경기</div>
+            <div class="schedule-event">4반 · 3반 · 5반</div>
+          </div>
+          <div class="schedule-item">
+            <div class="schedule-time">3경기</div>
+            <div class="schedule-event">6반 · 1반 · 7반</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
   </div>
-
 </main>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const buttons = document.querySelectorAll("[data-record]");
+  const panels = document.querySelectorAll(".record-panel");
+
+  buttons.forEach(function (button) {
+    button.addEventListener("click", function () {
+      const target = button.dataset.record;
+
+      buttons.forEach(function (b) {
+        b.classList.remove("active");
+      });
+
+      panels.forEach(function (panel) {
+        panel.style.display = "none";
+      });
+
+      button.classList.add("active");
+
+      const selected = document.getElementById("record-" + target);
+      if (selected) selected.style.display = "block";
+    });
+  });
+});
+</script>
+
 
 
 
