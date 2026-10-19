@@ -101,7 +101,7 @@
   </p>
 
   <div id="ropeClassInputs"></div>
-  <button type="button" id="saveRopeButton">💾 8자 줄넘기 기록 저장</button>
+  <button type="button" id="saveRopeButton" style="display:none;">💾 8자 줄넘기 기록 저장</button>
 <p id="ropeSaveMessage" role="status"></p>
 </div>
 
@@ -127,6 +127,12 @@
   </div>
 </div>
 
+<button type="button"
+  id="save-rope-${classNum}"
+  style="margin-top:12px;">
+  💾 ${classNum}반 기록 저장
+</button>
+<p id="rope-status-${classNum}" role="status"></p>
       </div>
     `;
   }
@@ -148,103 +154,84 @@
 
   let teacherPassword = "";
   
-document.getElementById("saveRopeButton").addEventListener(
-  "click",
-  async function () {
-    const button = this;
-    const message = document.getElementById("ropeSaveMessage");
 
-    if (!teacherPassword) {
-      message.textContent = "먼저 선생님 인증을 해주세요.";
-      return;
-    }
+for (let classNum = 1; classNum <= 9; classNum++) {
+  document.getElementById(`save-rope-${classNum}`)
+    .addEventListener("click", async function () {
+      const button = this;
+      const message = document.getElementById(`rope-status-${classNum}`);
 
-    const records = [];
+      if (!teacherPassword) {
+        message.textContent = "먼저 선생님 인증을 해주세요.";
+        message.style.color = "red";
+        return;
+      }
 
-    for (let classNum = 1; classNum <= 9; classNum++) {
-      const first = document.getElementById(
-        `rope-first-${classNum}`
-      ).value.trim();
-
-      const second = document.getElementById(
-        `rope-second-${classNum}`
-      ).value.trim();
-
-      if (first === "" && second === "") continue;
+      const first = document.getElementById(`rope-first-${classNum}`).value.trim();
+      const second = document.getElementById(`rope-second-${classNum}`).value.trim();
 
       const valid = (value) =>
         value === "" ||
         (Number.isInteger(Number(value)) && Number(value) >= 0);
 
-      if (!valid(first) || !valid(second)) {
-        message.textContent = `${classNum}반 기록을 확인해 주세요.`;
+      if ((first === "" && second === "") ||
+          !valid(first) || !valid(second)) {
+        message.textContent = "1차 또는 2차 기록을 정확히 입력해 주세요.";
         message.style.color = "red";
         return;
       }
 
-      records.push({
-        classNum,
-        first,
-        second,
-        best: Math.max(
-          first === "" ? 0 : Number(first),
-          second === "" ? 0 : Number(second)
-        )
-      });
-    }
+      const attempts = [
+        { number: 1, value: first },
+        { number: 2, value: second }
+      ];
 
-    if (records.length === 0) {
-      message.textContent = "저장할 기록을 입력해 주세요.";
-      message.style.color = "red";
-      return;
-    }
+      button.disabled = true;
+      message.style.color = "#17243b";
+      message.textContent = "저장 중...";
 
-    button.disabled = true;
-    message.style.color = "#17243b";
-    message.textContent = "기록 저장 중...";
+      try {
+        for (const attempt of attempts) {
+          if (attempt.value === "") continue;
 
-    let saved = 0;
+          const response = await fetch(FUNCTION_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action: "save",
+              password: teacherPassword,
+              sport: "rope",
+              match_id: `class_${classNum}_attempt_${attempt.number}`,
+              class_number: classNum,
+              result_value: Number(attempt.value),
+              winner_class: null
+            })
+          });
 
-    try {
-      for (const record of records) {
-        const response = await fetch(FUNCTION_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            action: "save",
-            password: teacherPassword,
-            sport: "rope",
-            match_id: `class_${record.classNum}`,
-            class_number: record.classNum,
-            result_value: record.best,
-            winner_class: null
-          })
-        });
+          const result = await response.json();
 
-        const result = await response.json();
-
-        if (!response.ok || !result.success) {
-          throw new Error(
-            result.error || `${record.classNum}반 저장 실패`
-          );
+          if (!response.ok || !result.success) {
+            throw new Error(result.error || "기록 저장 실패");
+          }
         }
 
-        saved++;
+        const best = Math.max(
+          first === "" ? 0 : Number(first),
+          second === "" ? 0 : Number(second)
+        );
+
+        message.textContent = `✅ 저장 완료! 최고 기록 ${best}회`;
+        message.style.color = "green";
+
+      } catch (error) {
+        message.textContent = `⚠️ 저장 오류: ${error.message}`;
+        message.style.color = "red";
+      } finally {
+        button.disabled = false;
       }
+    });
+}
 
-      message.textContent =
-        `✅ ${saved}개 반의 최고 기록을 저장했습니다.`;
-      message.style.color = "green";
-
-    } catch (error) {
-      message.textContent =
-        `⚠️ ${saved}개 반 저장 후 오류: ${error.message}`;
-      message.style.color = "red";
-    } finally {
-      button.disabled = false;
-    }
-  }
-);
 
 
   document.getElementById("loginForm").addEventListener(
