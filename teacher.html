@@ -111,12 +111,20 @@
       <div style="border:1px solid #e2e8f0; border-radius:10px;
                   padding:16px; margin-top:12px;">
         <h4>${classNum}반</h4>
-        <label for="rope-first-${classNum}">1차 시도 (회)</label>
-        <input id="rope-first-${classNum}" type="number"
-               min="0" step="1" placeholder="1차 기록">
-        <label for="rope-second-${classNum}">2차 시도 (회)</label>
-        <input id="rope-second-${classNum}" type="number"
-               min="0" step="1" placeholder="2차 기록">
+       
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+  <div>
+    <label for="rope-first-${classNum}">1차 시도 (회)</label>
+    <input id="rope-first-${classNum}" type="number"
+           min="0" step="1" placeholder="1차 기록">
+  </div>
+  <div>
+    <label for="rope-second-${classNum}">2차 시도 (회)</label>
+    <input id="rope-second-${classNum}" type="number"
+           min="0" step="1" placeholder="2차 기록">
+  </div>
+</div>
+
       </div>
     `;
   }
