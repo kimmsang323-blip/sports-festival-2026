@@ -79,15 +79,62 @@
     </section>
   </main>
 
-  <script>
-    document.getElementById("loginForm").addEventListener(
-      "submit",
-      function (event) {
-        event.preventDefault();
-        document.getElementById("message").textContent =
-          "인증 화면 준비 완료! 서버 연결은 다음 단계에서 진행합니다.";
+  
+<script>
+  const FUNCTION_URL =
+    "https://tdrebwaendjrwqcfforx.supabase.co/functions/v1/festival-admin";
+
+  let teacherPassword = "";
+
+  document.getElementById("loginForm").addEventListener(
+    "submit",
+    async function (event) {
+      event.preventDefault();
+
+      const passwordInput = document.getElementById("password");
+      const message = document.getElementById("message");
+      const button = document.querySelector("#loginForm button");
+
+      const password = passwordInput.value;
+
+      button.disabled = true;
+      message.textContent = "비밀번호 확인 중...";
+
+      try {
+        const response = await fetch(FUNCTION_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            action: "check",
+            password: password
+          })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.error || "인증에 실패했습니다.");
+        }
+
+        teacherPassword = password;
+        passwordInput.value = "";
+        message.textContent = "인증 성공! 선생님 환영합니다. ✅";
+        message.style.color = "green";
+
+        document.getElementById("loginForm").style.display = "none";
+
+      } catch (error) {
+        message.textContent =
+          error.message || "서버 연결에 실패했습니다.";
+        message.style.color = "red";
+      } finally {
+        button.disabled = false;
       }
-    );
-  </script>
+    }
+  );
+</script>
+
 </body>
 </html>
