@@ -109,6 +109,19 @@
     <p style="color:#d97706; font-size:13px;">
   ※ 모든 학급의 기록 입력 전까지 순위와 점수는 임시 결과입니다.
 </p>
+    <div id="ropeProgress"
+     style="background:#f1f5f9; padding:14px; border-radius:10px; margin-bottom:16px;">
+  <strong>📋 기록 입력 현황</strong>
+  <p id="ropeProgressCount" style="margin:8px 0;">
+    입력 현황을 불러오는 중...
+  </p>
+  <div style="background:#cbd5e1; height:10px; border-radius:10px; overflow:hidden;">
+    <div id="ropeProgressBar"
+         style="background:#2563eb; width:0%; height:100%;"></div>
+  </div>
+  <p id="ropeProgressMissing"
+     style="font-size:13px; color:#64748b; margin-top:10px;"></p>
+</div>
   <div id="ropeRankingTable">
     아직 입력된 기록이 없습니다.
   </div>
@@ -212,6 +225,31 @@ for (const record of records) {
   }
 }
 
+    const completedClasses = Object.keys(bestRecords)
+  .map(Number)
+  .sort((a, b) => a - b);
+
+const missingClasses = [];
+
+for (let classNum = 1; classNum <= 9; classNum++) {
+  if (!(classNum in bestRecords)) {
+    missingClasses.push(classNum);
+  }
+}
+
+const completedCount = completedClasses.length;
+const progressPercent = (completedCount / 9) * 100;
+
+document.getElementById("ropeProgressCount").textContent =
+  `✅ ${completedCount} / 9개 학급 입력 완료`;
+
+document.getElementById("ropeProgressBar").style.width =
+  `${progressPercent}%`;
+
+document.getElementById("ropeProgressMissing").textContent =
+  missingClasses.length > 0
+    ? `미입력 학급: ${missingClasses.map(n => `${n}반`).join(", ")}`
+    : "🎉 모든 학급의 기록이 입력되었습니다!";
 const sorted = Object.entries(bestRecords)
   .map(([classNum, best]) => ({
     classNum: Number(classNum),
