@@ -273,9 +273,8 @@ let rankingHtml = `
 `;
 
 sorted.forEach((item, index) => {
-  const rank = sorted.findIndex(
-    other => other.best === item.best
-  ) + 1;
+  const rank = [...new Set(sorted.map(other => other.best))]
+  .indexOf(item.best) + 1;
 
   rankingHtml += `
     <tr>
