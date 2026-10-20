@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
        renderThreeLeggedLiveRanking(results);
        renderDodgeballLiveResults(results);
        renderDodgeballBracket(results);
+       renderTugBracket(results);
 
     } catch (error) {
       console.error("경기 결과 불러오기 오류:", error);
@@ -217,6 +218,42 @@ document.addEventListener("DOMContentLoaded", function () {
       : "⑥ 승리 학급";
   }
 }
+
+   
+function renderTugBracket(results) {
+  const winners = {};
+
+  results
+    .filter(record => record.sport === "tug")
+    .forEach(record => {
+      const winner = Number(record.winner_class);
+      if (winner >= 1 && winner <= 9) {
+        winners[String(record.match_id)] = winner;
+      }
+    });
+
+  const nextTeams = {
+    5: [winners["1"], 1],
+    6: [winners["3"], winners["2"]],
+    7: [winners["5"], winners["4"]],
+    8: [winners["7"], winners["6"]]
+  };
+
+  for (const [matchId, teams] of Object.entries(nextTeams)) {
+    teams.forEach((classNum, index) => {
+      const element = document.getElementById(
+        `tugMatch${matchId}Team${index + 1}`
+      );
+
+      if (element) {
+        element.textContent = classNum
+          ? `${classNum}반`
+          : "승리 학급";
+      }
+    });
+  }
+}
+
    function renderRopeLiveRanking(results) {
   const container = document.getElementById("ropeLiveRanking");
   if (!container) return;
