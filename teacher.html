@@ -574,9 +574,9 @@ const teacherTime = teacherRecord && Number(teacherRecord.result_value) > 0
       time,
       rank,
       bonus: teacherTime !== null && Number(record.result_value) < teacherTime,
-score: scores[rank - 1] + (teacherTime !== null && Number(record.result_value) < teacherTime ? 30 : 0)
+      score: scores[rank - 1] + (teacherTime !== null && Number(record.result_value) < teacherTime ? 30 : 0)
+    };
   });
-
   table.innerHTML = `
     <table style="width:100%; border-collapse:collapse; text-align:center;">
       <thead>
