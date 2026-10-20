@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
        renderMissionLiveRanking(results);
        renderRopeLiveRanking(results);
        renderThreeLeggedLiveRanking(results);
+       renderDodgeballLiveResults(results);
 
     } catch (error) {
       console.error("경기 결과 불러오기 오류:", error);
@@ -118,6 +119,28 @@ document.addEventListener("DOMContentLoaded", function () {
       </table>
     </div>
   `;
+}
+   function renderDodgeballLiveResults(results) {
+  const container = document.getElementById("dodgeballLiveResults");
+  if (!container) return;
+        const dodgeballRecords = results.filter(record =>
+    record.sport === "dodgeball" &&
+    record.winner_class !== null &&
+    Number.isInteger(Number(record.winner_class)) &&
+    Number(record.winner_class) >= 1 &&
+    Number(record.winner_class) <= 9
+  );
+       if (dodgeballRecords.length === 0) {
+    container.textContent = "아직 입력된 피구 경기 결과가 없습니다.";
+    return;
+  } 
+      dodgeballRecords.sort((a, b) => Number(a.match_id) - Number(b.match_id));
+        container.innerHTML = dodgeballRecords.map(record => `
+    <div style="padding:10px; border-bottom:1px solid #ddd;">
+      <strong>${record.match_id}경기</strong>
+      <span>🏆 ${record.winner_class}반 승리</span>
+    </div>
+  `).join("");
 }
    function renderRopeLiveRanking(results) {
   const container = document.getElementById("ropeLiveRanking");
