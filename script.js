@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const results = await response.json();
       console.log("Supabase 경기 결과:", results);
+       renderMissionLiveRanking(results);
 
     } catch (error) {
       console.error("경기 결과 불러오기 오류:", error);
@@ -37,6 +38,91 @@ document.addEventListener("DOMContentLoaded", function () {
      1. 하단 메뉴 화면 전환
   ========================= */
 
+   function renderMissionLiveRanking(results) {
+  const container = document.getElementById("missionLiveRanking");
+  if (!container) return;
+
+  const missionRecords = results.filter(record =>
+    record.sport === "mission"
+  );
+
+  const teacherRecord = missionRecords.find(record =>
+    record.match_id === "teacher_team"
+  );
+
+  const teacherTime = teacherRecord
+    ? Number(teacherRecord.result_value)
+    : null;
+
+  const classRecords = missionRecords
+    .filter(record =>
+      /^class_[1-9]$/.test(record.match_id) &&
+      Number(record.result_value) > 0
+    )
+    .sort((a, b) =>
+      Number(a.result_value) - Number(b.result_value)
+    );
+        const scores = [120, 110, 100, 90, 80, 70, 60, 50, 40];
+
+  let rank = 0;
+  let previousTime = null;
+
+  const ranking = classRecords.map(record => {
+    const time = Number(record.result_value);
+
+    if (previousTime === null || time !== previousTime) {
+      rank++;
+    }
+
+    previousTime = time;
+
+    const bonus = teacherTime !== null && time < teacherTime;
+
+    return {
+      classNum: Number(record.class_number),
+      time,
+      rank,
+      bonus,
+      score: scores[rank - 1] + (bonus ? 30 : 0)
+    };
+  });
+        if (ranking.length === 0) {
+    container.textContent = "아직 입력된 경기 기록이 없습니다.";
+    return;
+  }
+
+  container.innerHTML = `
+    <p style="font-size:13px;color:#697386;">
+      기록 입력 현황: ${ranking.length}/9학급
+    </p>
+
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;text-align:center;">
+        <thead>
+          <tr>
+            <th>순위</th>
+            <th>학급</th>
+            <th>기록</th>
+            <th>점수</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${ranking.map(row => `
+            <tr>
+              <td>${row.rank}위</td>
+              <td>${row.classNum}반</td>
+              <td>${row.time.toFixed(2)}초</td>
+              <td>
+                ${row.score}점
+                ${row.bonus ? "🏅 보너스 점수 획득!" : ""}
+              </td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
   const navItems = document.querySelectorAll(".nav-item");
   const pages = document.querySelectorAll(".page");
 
