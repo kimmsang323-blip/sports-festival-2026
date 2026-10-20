@@ -167,6 +167,8 @@
       this.value === "rope" ? "block" : "none";
     document.getElementById("threeLeggedInput").style.display =
   this.value === "threeLegged" ? "block" : "none";
+    document.getElementById("missionInput").style.display =
+  this.value === "mission" ? "block" : "none";
   });
 </script>
 <div id="threeLeggedInput" style="display:none; margin-top:24px;">
@@ -217,6 +219,41 @@
   }
 </script>
 </div>
+  <div id="missionInput" style="display:none; margin-top:24px;">
+  <h3>🏃 미션달리기 기록 입력</h3>
+  <p>각 학급의 경기 소요 시간을 초 단위로 입력해 주세요.</p>
+  <p style="color:#64748b; font-size:14px;">
+    기록이 짧을수록 높은 순위를 받습니다.
+  </p>
+  <div id="missionClassInputs"></div>
+</div>
+  <script>
+  const missionContainer =
+    document.getElementById("missionClassInputs");
+
+  for (let classNum = 1; classNum <= 9; classNum++) {
+    missionContainer.innerHTML += `
+      <div style="border:1px solid #e2e8f0; border-radius:10px; padding:16px; margin-top:12px;">
+        <h4>${classNum}반</h4>
+
+        <label for="mission-${classNum}">경기 기록 (초)</label>
+        <input
+          id="mission-${classNum}"
+          type="number"
+          min="0.01"
+          step="0.01"
+          placeholder="예: 65.42"
+        >
+
+        <button type="button" id="save-mission-${classNum}">
+          💾 ${classNum}반 기록 저장
+        </button>
+
+        <p id="mission-status-${classNum}" role="status"></p>
+      </div>
+    `;
+  }
+</script>
 </section>
 
   </main>
@@ -629,7 +666,70 @@ for (let classNum = 1; classNum <= 9; classNum++) {
     });
 }
 
+// 미션달리기 학급별 기록 저장
+for (let classNum = 1; classNum <= 9; classNum++) {
+  document.getElementById(`save-mission-${classNum}`)
+    .addEventListener("click", async function () {
+      const input = document.getElementById(`mission-${classNum}`);
+      const message = document.getElementById(`mission-status-${classNum}`);
+      const button = this;
+      const seconds = Number(input.value);
 
+      if (!teacherPassword) {
+        message.textContent = "먼저 선생님 인증을 해주세요.";
+        message.style.color = "red";
+        return;
+      }
+
+      if (
+        !input.value.trim() ||
+        !Number.isFinite(seconds) ||
+        seconds <= 0 ||
+        !/^\d+(\.\d{1,2})?$/.test(input.value)
+      ) {
+        message.textContent = "0보다 큰 기록을 소수 둘째 자리까지 입력해 주세요.";
+        message.style.color = "red";
+        return;
+      }
+
+      button.disabled = true;
+      message.textContent = "기록 저장 중...";
+      message.style.color = "#64748b";
+
+      try {
+        const response = await fetch(FUNCTION_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            action: "save",
+            password: teacherPassword,
+            sport: "mission",
+            match_id: `class_${classNum}`,
+            class_number: classNum,
+            result_value: seconds,
+            winner_class: null
+          })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.error || "저장 실패");
+        }
+
+        message.textContent = `✅ ${classNum}반 ${seconds}초 저장 완료!`;
+        message.style.color = "green";
+
+      } catch (error) {
+        message.textContent = `⚠️ 저장 오류: ${error.message}`;
+        message.style.color = "red";
+      } finally {
+        button.disabled = false;
+      }
+    });
+}
   document.getElementById("loginForm").addEventListener(
     "submit",
     async function (event) {
