@@ -782,6 +782,87 @@ for (let classNum = 1; classNum <= 9; classNum++) {
     });
 }
 
+  
+  const dodgeballTeams = {
+  "1": [8, 5],
+  "2": [4, 6],
+  "3": [1, 3],
+  "4": [9, 7],
+  "5": [2]
+};
+  async function loadDodgeballWinners() {
+  const response = await fetch(
+    "https://tdrebwaendjrwqcfforx.supabase.co/rest/v1/festival_results?sport=eq.dodgeball&select=match_id,winner_class",
+    {
+      headers: {
+        apikey: "sb_publishable_Y3k600Ij5iI0FK8CNKhJg_WLewWGFO"
+      }
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("피구 경기 결과 조회 실패");
+  }
+
+  const records = await response.json();
+  return Object.fromEntries(
+    records
+      .filter(record => record.winner_class !== null)
+      .map(record => [record.match_id, Number(record.winner_class)])
+  );
+}
+  document.getElementById("dodgeballMatch").addEventListener("change", async function () {
+  const winnerSelect = document.getElementById("dodgeballWinner");
+  const matchId = this.value;
+let teams = dodgeballTeams[matchId] || [];
+
+if (matchId === "5") {
+  try {
+    const winners = await loadDodgeballWinners();
+    teams = winners["1"] ? [winners["1"], 2] : [];
+  } catch (error) {
+    console.error("피구 경기 결과 조회 오류:", error);
+    teams = [];
+  }
+}
+    if (matchId === "6" || matchId === "7") {
+  try {
+    const winners = await loadDodgeballWinners();
+
+    const previousMatches = matchId === "6"
+      ? ["3", "2"]
+      : ["5", "4"];
+
+    teams = previousMatches.every(id => winners[id])
+      ? previousMatches.map(id => winners[id])
+      : [];
+  } catch (error) {
+    console.error("피구 준결승 진출 학급 조회 오류:", error);
+    teams = [];
+  }
+}
+    if (matchId === "8") {
+  try {
+    const winners = await loadDodgeballWinners();
+
+    teams = winners["7"] && winners["6"]
+      ? [winners["7"], winners["6"]]
+      : [];
+  } catch (error) {
+    console.error("피구 결승 진출 학급 조회 오류:", error);
+    teams = [];
+  }
+}
+
+  winnerSelect.innerHTML = '<option value="">승리 학급을 선택하세요</option>';
+
+  teams.forEach(classNum => {
+    const option = document.createElement("option");
+    option.value = String(classNum);
+    option.textContent = `${classNum}반`;
+    winnerSelect.appendChild(option);
+  });
+});
   document.getElementById("saveDodgeball").addEventListener("click", async function () {
   const matchId = document.getElementById("dodgeballMatch").value;
   const winner = document.getElementById("dodgeballWinner").value;
@@ -798,6 +879,15 @@ for (let classNum = 1; classNum <= 9; classNum++) {
     message.style.color = "red";
     return;
   }
+    const allowedWinners = Array.from(
+  document.getElementById("dodgeballWinner").options
+).filter(option => option.value !== "").map(option => option.value);
+
+if (!allowedWinners.includes(winner)) {
+  message.textContent = "⚠️ 해당 경기에 출전하는 학급만 선택할 수 있습니다.";
+  message.style.color = "red";
+  return;
+}
       const button = this;
   button.disabled = true;
   message.textContent = "저장 중...";
