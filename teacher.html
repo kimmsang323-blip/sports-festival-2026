@@ -226,6 +226,13 @@
     기록이 짧을수록 높은 순위를 받습니다.
   </p>
   <div id="missionClassInputs"></div>
+    <div id="missionRanking" style="margin-top:24px;">
+  <h3>🏆 미션달리기 실시간 순위</h3>
+  <p id="missionProgress">기록 입력 현황: 0/9학급</p>
+  <div id="missionRankingTable">
+    아직 입력된 기록이 없습니다.
+  </div>
+</div>
 </div>
   <script>
   const missionContainer =
@@ -484,9 +491,77 @@ async function loadMissionRecords() {
       }
     }
 
+     updateMissionRanking(records);
   } catch (error) {
     console.error("미션달리기 기록 불러오기 오류:", error);
   }
+}
+  // 미션달리기 실시간 순위 계산
+function updateMissionRanking(records) {
+  const validRecords = records
+    .filter(record =>
+      /^class_[1-9]$/.test(record.match_id) &&
+      Number(record.result_value) > 0
+    )
+    .sort((a, b) =>
+      Number(a.result_value) - Number(b.result_value)
+    );
+
+  const progress = document.getElementById("missionProgress");
+  const table = document.getElementById("missionRankingTable");
+
+  progress.textContent =
+    `기록 입력 현황: ${validRecords.length}/9학급`;
+
+  if (validRecords.length === 0) {
+    table.textContent = "아직 입력된 기록이 없습니다.";
+    return;
+  }
+
+  const scores = [120, 110, 100, 90, 80, 70, 60, 50, 40];
+
+  let rank = 0;
+  let previousTime = null;
+
+  const rows = validRecords.map(record => {
+    const time = Number(record.result_value);
+
+    if (previousTime === null || time !== previousTime) {
+      rank++;
+    }
+
+    previousTime = time;
+
+    return {
+      classNum: Number(record.class_number),
+      time,
+      rank,
+      score: scores[rank - 1]
+    };
+  });
+
+  table.innerHTML = `
+    <table style="width:100%; border-collapse:collapse; text-align:center;">
+      <thead>
+        <tr>
+          <th>순위</th>
+          <th>학급</th>
+          <th>기록</th>
+          <th>점수</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map(row => `
+          <tr>
+            <td>${row.rank}위</td>
+            <td>${row.classNum}반</td>
+            <td>${row.time.toFixed(2)}초</td>
+            <td>${row.score}점</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
 }
   // 2인 3각 실시간 순위 계산
 function updateThreeLeggedRanking(records) {
