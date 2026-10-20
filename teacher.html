@@ -128,7 +128,128 @@
 
 <p id="dodgeballMessage" role="status"></p>
 </div>
-  <div id="ropeInput" style="display:none; margin-top:24px;">
+  <div id="tugInput" style="display:none; margin-top:24px;">
+  <h3>💪 줄다리기 경기 결과 입력</h3>
+  <p>경기별 승리 학급을 선택하고 저장합니다.</p>
+</div>
+  <label for="tugMatch" style="display:block; margin-top:16px;">
+  경기 선택
+</label>
+<select id="tugMatch" style="width:100%; padding:12px; margin-top:8px;">
+  <option value="">경기를 선택하세요</option>
+    <option value="1">1경기 (4반 VS 3반)</option>
+  <option value="2">2경기 (5반 VS 8반)</option>
+  <option value="3">3경기 (2반 VS 7반)</option>
+  <option value="4">4경기 (6반 VS 9반)</option>
+  <option value="5">5경기 (① 승리 학급 VS 1반)</option>
+  <option value="6">6경기 (③ 승리 학급 VS ② 승리 학급)</option>
+  <option value="7">7경기 (⑤ 승리 학급 VS ④ 승리 학급)</option>
+  <option value="8">8경기 (결승전)</option>
+</select>
+  <label for="tugWinner" style="display:block; margin-top:16px;">
+  승리 학급
+</label>
+<select id="tugWinner" style="width:100%; padding:12px; margin-top:8px;">
+  <option value="">승리 학급을 선택하세요</option>
+</select>
+  <button type="button" id="saveTug"
+  style="width:100%; margin-top:20px; padding:14px;">
+  🏆 줄다리기 경기 결과 저장
+</button>
+
+<p id="tugMessage" role="status"></p>
+</div>
+<script>
+const tugTeams = {
+  "1": [4, 3],
+  "2": [5, 8],
+  "3": [2, 7],
+  "4": [6, 9]
+};
+async function loadTugWinners() {
+  const response = await fetch(
+    "https://tdrebwaendjrwqcfforx.supabase.co/rest/v1/festival_results?sport=eq.tug&select=match_id,winner_class",
+    {
+      headers: {
+        apikey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkcmVid2FlbmRqcndxY2Zmb3J4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxMTU3MTcsImV4cCI6MjEwNzY5MTcxN30.cgFIaVbCCaqfWSfzC37Vrr3WC1UQnqQKB4Kk7gghIhc"
+      }
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("줄다리기 경기 결과 조회 실패");
+  }
+
+  const records = await response.json();
+
+  return Object.fromEntries(
+    records
+      .filter(record => record.winner_class !== null)
+      .map(record => [
+        String(record.match_id),
+        Number(record.winner_class)
+      ])
+  );
+}
+document.getElementById("tugMatch").addEventListener("change", async function () {
+  const winnerSelect = document.getElementById("tugWinner");
+  let teams = tugTeams[this.value] || [];
+
+if (this.value === "5") {
+  try {
+    const winners = await loadTugWinners();
+    teams = winners["1"] ? [winners["1"], 1] : [];
+  } catch (error) {
+    console.error("줄다리기 진출 학급 조회 오류:", error);
+    teams = [];
+  }
+}
+
+  if (this.value === "6") {
+  try {
+    const winners = await loadTugWinners();
+    teams = winners["3"] && winners["2"]
+      ? [winners["3"], winners["2"]]
+      : [];
+  } catch (error) {
+    console.error("줄다리기 6경기 진출 학급 조회 오류:", error);
+    teams = [];
+  }
+}
+  if (this.value === "7") {
+  try {
+    const winners = await loadTugWinners();
+    teams = winners["5"] && winners["4"]
+      ? [winners["5"], winners["4"]]
+      : [];
+  } catch (error) {
+    console.error("줄다리기 7경기 진출 학급 조회 오류:", error);
+    teams = [];
+  }
+}
+  if (this.value === "8") {
+  try {
+    const winners = await loadTugWinners();
+    teams = winners["7"] && winners["6"]
+      ? [winners["7"], winners["6"]]
+      : [];
+  } catch (error) {
+    console.error("줄다리기 결승전 진출 학급 조회 오류:", error);
+    teams = [];
+  }
+}
+  winnerSelect.innerHTML =
+    '<option value="">승리 학급을 선택하세요</option>';
+
+  teams.forEach(classNum => {
+    const option = document.createElement("option");
+    option.value = String(classNum);
+    option.textContent = `${classNum}반`;
+    winnerSelect.appendChild(option);
+  });
+});
+</script>
+<div id="ropeInput" style="display:none; margin-top:24px;">
   <h3>🏅 8자 줄넘기 기록 입력</h3>
   <p>각 반의 1차·2차 기록을 입력해 주세요.</p>
   <p style="color:#64748b; font-size:14px;">
@@ -200,6 +321,8 @@
   document.getElementById("sport").addEventListener("change", function () {
       document.getElementById("dodgeballInput").style.display =
     this.value === "dodgeball" ? "block" : "none";
+    document.getElementById("tugInput").style.display =
+  this.value === "tug" ? "block" : "none";
     document.getElementById("ropeInput").style.display =
       this.value === "rope" ? "block" : "none";
     document.getElementById("threeLeggedInput").style.display =
@@ -915,6 +1038,68 @@ if (!allowedWinners.includes(winner)) {
     }
 
     message.textContent = "✅ 피구 경기 결과 저장 완료!";
+    message.style.color = "green";
+  } catch (error) {
+    message.textContent = `⚠️ 저장 오류: ${error.message}`;
+    message.style.color = "red";
+  } finally {
+    button.disabled = false;
+  }
+});
+  document.getElementById("saveTug").addEventListener("click", async function () {
+  const matchId = document.getElementById("tugMatch").value;
+  const winner = document.getElementById("tugWinner").value;
+  const message = document.getElementById("tugMessage");
+
+  if (!teacherPassword) {
+    message.textContent = "⚠️ 먼저 선생님 인증을 해주세요.";
+    message.style.color = "red";
+    return;
+  }
+
+  if (!matchId || !winner) {
+    message.textContent = "⚠️ 경기 번호와 승리 학급을 모두 선택해 주세요.";
+    message.style.color = "red";
+    return;
+  }
+
+  const allowedWinners = Array.from(
+    document.getElementById("tugWinner").options
+  ).filter(option => option.value !== "").map(option => option.value);
+
+  if (!allowedWinners.includes(winner)) {
+    message.textContent = "⚠️ 해당 경기에 출전하는 학급만 선택할 수 있습니다.";
+    message.style.color = "red";
+    return;
+  }
+
+  const button = this;
+  button.disabled = true;
+  message.textContent = "저장 중...";
+  message.style.color = "#17243b";
+
+  try {
+    const response = await fetch(FUNCTION_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "save",
+        password: teacherPassword,
+        sport: "tug",
+        match_id: matchId,
+        class_number: null,
+        result_value: null,
+        winner_class: Number(winner)
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || "저장 실패");
+    }
+
+    message.textContent = "✅ 줄다리기 경기 결과 저장 완료!";
     message.style.color = "green";
   } catch (error) {
     message.textContent = `⚠️ 저장 오류: ${error.message}`;
