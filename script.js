@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const results = await response.json();
       console.log("Supabase 경기 결과:", results);
        renderMissionLiveRanking(results);
+       renderRopeLiveRanking(results);
 
     } catch (error) {
       console.error("경기 결과 불러오기 오류:", error);
@@ -38,6 +39,91 @@ document.addEventListener("DOMContentLoaded", function () {
      1. 하단 메뉴 화면 전환
   ========================= */
 
+   function renderRopeLiveRanking(results) {
+  const container = document.getElementById("ropeLiveRanking");
+  if (!container) return;
+
+  const ropeRecords = results.filter(record =>
+    record.sport === "rope"
+  );
+
+  if (ropeRecords.length === 0) {
+    container.textContent = "아직 입력된 경기 기록이 없습니다.";
+    return;
+  }
+        const classRecords = [];
+
+  for (let classNum = 1; classNum <= 9; classNum++) {
+    const attempts = ropeRecords.filter(record =>
+      record.class_number === classNum &&
+      ["class_" + classNum + "_attempt_1", "class_" + classNum + "_attempt_2"].includes(record.match_id)
+    );
+
+    const validAttempts = attempts
+      .map(record => Number(record.result_value))
+      .filter(value => Number.isFinite(value) && value >= 0);
+
+    if (validAttempts.length > 0) {
+      classRecords.push({
+        classNum,
+        best: Math.max(...validAttempts)
+      });
+    }
+  }
+
+  classRecords.sort((a, b) => b.best - a.best);
+        const scores = [120, 110, 100, 90, 80, 70, 60, 50, 40];
+
+  let rank = 0;
+  let previousBest = null;
+
+  const ranking = classRecords.map(record => {
+    if (previousBest === null || record.best !== previousBest) {
+      rank++;
+    }
+
+    previousBest = record.best;
+
+    return {
+      classNum: record.classNum,
+      best: record.best,
+      rank,
+      score: scores[rank - 1]
+    };
+  });
+        if (ranking.length === 0) {
+    container.textContent = "아직 입력된 경기 기록이 없습니다.";
+    return;
+  }
+
+  container.innerHTML = `
+    <p style="font-size:13px;color:#697386;">
+      기록 입력 현황: ${ranking.length}/9학급
+    </p>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;text-align:center;">
+        <thead>
+          <tr>
+            <th>순위</th>
+            <th>학급</th>
+            <th>최고 기록</th>
+            <th>점수</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${ranking.map(row => `
+            <tr>
+              <td>${row.rank}위</td>
+              <td>${row.classNum}반</td>
+              <td>${row.best}회</td>
+              <td>${row.score}점</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
    function renderMissionLiveRanking(results) {
   const container = document.getElementById("missionLiveRanking");
   if (!container) return;
