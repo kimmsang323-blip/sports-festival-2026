@@ -225,6 +225,25 @@
   <p style="color:#64748b; font-size:14px;">
     기록이 짧을수록 높은 순위를 받습니다.
   </p>
+    <div style="border:2px solid #1e3a70; border-radius:12px; padding:16px; margin:20px 0;">
+  <h3>👨‍🏫 선생님 팀 기준 기록</h3>
+  <p>선생님 팀보다 빠른 학급에 보너스 30점이 자동 부여됩니다.</p>
+
+  <label for="missionTeacherTime">선생님 팀 기록 (초)</label>
+  <input
+    id="missionTeacherTime"
+    type="number"
+    min="0.01"
+    step="0.01"
+    placeholder="예: 70.00"
+  >
+
+  <button type="button" id="saveMissionTeacherTime">
+    💾 선생님 팀 기록 저장
+  </button>
+
+  <p id="missionTeacherStatus" role="status"></p>
+</div>
   <div id="missionClassInputs"></div>
     <div id="missionRanking" style="margin-top:24px;">
   <h3>🏆 미션달리기 실시간 순위</h3>
@@ -251,13 +270,7 @@
           step="0.01"
           placeholder="예: 65.42"
         >
-<label style="display:block; margin:12px 0;">
-  <input
-    type="checkbox"
-    id="mission-bonus-${classNum}"
-  >
-  🏅 선생님 팀 승리 (+30점)
-</label>
+
         <button type="button" id="save-mission-${classNum}">
           💾 ${classNum}반 기록 저장
         </button>
@@ -495,17 +508,33 @@ async function loadMissionRecords() {
       if (input) {
         input.value = record.result_value;
       }
-      const bonusCheckbox = document.getElementById(`mission-bonus-${classNum}`);
-if (bonusCheckbox) bonusCheckbox.checked = Number(record.winner_class) === classNum;
+      
     }
 
+    restoreMissionTeacherTime(records);
      updateMissionRanking(records);
   } catch (error) {
     console.error("미션달리기 기록 불러오기 오류:", error);
   }
 }
   // 미션달리기 실시간 순위 계산
+  function restoreMissionTeacherTime(records) {
+  const teacherRecord = records.find(
+    record => record.sport === "mission" && record.match_id === "teacher_team"
+  );
+
+  const input = document.getElementById("missionTeacherTime");
+
+  if (input && teacherRecord) {
+    input.value = teacherRecord.result_value;
+  }
+}
 function updateMissionRanking(records) {
+  const teacherRecord = records.find(
+  record => record.sport === "mission" && record.match_id === "teacher_team"
+);
+const teacherTime = teacherRecord && Number(teacherRecord.result_value) > 0
+  ? Number(teacherRecord.result_value) : null;
   const validRecords = records
     .filter(record =>
       /^class_[1-9]$/.test(record.match_id) &&
@@ -544,9 +573,8 @@ function updateMissionRanking(records) {
       classNum: Number(record.class_number),
       time,
       rank,
-      bonus: Number(record.winner_class) === Number(record.class_number),
-score: scores[rank - 1] + (Number(record.winner_class) === Number(record.class_number) ? 30 : 0)
-    };
+      bonus: teacherTime !== null && Number(record.result_value) < teacherTime,
+score: scores[rank - 1] + (teacherTime !== null && Number(record.result_value) < teacherTime ? 30 : 0)
   });
 
   table.innerHTML = `
@@ -565,7 +593,7 @@ score: scores[rank - 1] + (Number(record.winner_class) === Number(record.class_n
             <td>${row.rank}위</td>
             <td>${row.classNum}반</td>
             <td>${row.time.toFixed(2)}초</td>
-            <td>${row.score}점${row.bonus ? " 🏅" : ""}</td>
+            <td>${row.score}점${row.bonus ? " 🏅 보너스 점수 획득!" : ""}</td>
           </tr>
         `).join("")}
       </tbody>
@@ -796,8 +824,7 @@ for (let classNum = 1; classNum <= 9; classNum++) {
       const message = document.getElementById(`mission-status-${classNum}`);
       const button = this;
       const seconds = Number(input.value);
-      const bonusCheckbox = document.getElementById(`mission-bonus-${classNum}`);
-const bonusWon = bonusCheckbox.checked;
+      
 
       if (!teacherPassword) {
         message.textContent = "먼저 선생님 인증을 해주세요.";
@@ -833,7 +860,7 @@ const bonusWon = bonusCheckbox.checked;
             match_id: `class_${classNum}`,
             class_number: classNum,
             result_value: seconds,
-            winner_class: bonusWon ? classNum : null
+            winner_class: null
           })
         });
 
@@ -855,6 +882,56 @@ const bonusWon = bonusCheckbox.checked;
       }
     });
 }
+  document.getElementById("saveMissionTeacherTime").addEventListener("click", async function () {
+  const input = document.getElementById("missionTeacherTime");
+  const message = document.getElementById("missionTeacherStatus");
+  const button = this;
+  const seconds = Number(input.value);
+
+  if (!input.value.trim() || !Number.isFinite(seconds) || seconds <= 0 ||
+      !/^\d+(\.\d{1,2})?$/.test(input.value.trim())) {
+    message.textContent = "⚠️ 기록을 초 단위로 입력해 주세요. (소수점 둘째 자리까지)";
+    message.style.color = "red";
+    return;
+  }
+
+  button.disabled = true;
+  message.textContent = "저장 중...";
+
+  try {
+    const response = await fetch(FUNCTION_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        action: "save",
+        password: teacherPassword,
+        sport: "mission",
+        match_id: "teacher_team",
+        class_number: null,
+        result_value: seconds,
+        winner_class: null
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || "저장 실패");
+    }
+
+    message.textContent = `✅ 선생님 팀 기록 ${seconds}초 저장 완료!`;
+    message.style.color = "green";
+    loadMissionRecords();
+
+  } catch (error) {
+    message.textContent = `⚠️ 저장 오류: ${error.message}`;
+    message.style.color = "red";
+  } finally {
+    button.disabled = false;
+  }
+});
   document.getElementById("loginForm").addEventListener(
     "submit",
     async function (event) {
