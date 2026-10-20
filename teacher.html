@@ -93,7 +93,42 @@
   </select>
 
 
-<div id="ropeInput" style="display:none; margin-top:24px;">
+<div id="dodgeballInput" style="display:none; margin-top:24px;">
+  <h3>🏐 피구 경기 결과 입력</h3>
+  <p>경기별 승리 학급을 선택하고 저장합니다.</p>
+  <label for="dodgeballMatch">경기 선택</label>
+  <select id="dodgeballMatch" style="width:100%; padding:12px; margin-top:8px;">
+    <option value="">경기를 선택하세요</option>
+    <option value="1">1경기</option>
+    <option value="2">2경기</option>
+    <option value="3">3경기</option>
+    <option value="4">4경기</option>
+    <option value="5">5경기</option>
+    <option value="6">6경기</option>
+    <option value="7">7경기</option>
+    <option value="8">8경기 (결승)</option>
+  </select>
+    <label for="dodgeballWinner" style="display:block; margin-top:16px;">승리 학급</label>
+  <select id="dodgeballWinner" style="width:100%; padding:12px; margin-top:8px;">
+    <option value="">승리 학급을 선택하세요</option>
+    <option value="1">1반</option>
+    <option value="2">2반</option>
+    <option value="3">3반</option>
+    <option value="4">4반</option>
+    <option value="5">5반</option>
+    <option value="6">6반</option>
+    <option value="7">7반</option>
+    <option value="8">8반</option>
+    <option value="9">9반</option>
+  </select>
+  <button type="button" id="saveDodgeball"
+  style="width:100%; margin-top:20px; padding:14px;">
+  🏆 피구 경기 결과 저장
+</button>
+
+<p id="dodgeballMessage" role="status"></p>
+</div>
+  <div id="ropeInput" style="display:none; margin-top:24px;">
   <h3>🏅 8자 줄넘기 기록 입력</h3>
   <p>각 반의 1차·2차 기록을 입력해 주세요.</p>
   <p style="color:#64748b; font-size:14px;">
@@ -163,6 +198,8 @@
   }
 
   document.getElementById("sport").addEventListener("change", function () {
+      document.getElementById("dodgeballInput").style.display =
+    this.value === "dodgeball" ? "block" : "none";
     document.getElementById("ropeInput").style.display =
       this.value === "rope" ? "block" : "none";
     document.getElementById("threeLeggedInput").style.display =
@@ -744,7 +781,59 @@ for (let classNum = 1; classNum <= 9; classNum++) {
       }
     });
 }
-// 2인 3각 학급별 기록 저장
+
+  document.getElementById("saveDodgeball").addEventListener("click", async function () {
+  const matchId = document.getElementById("dodgeballMatch").value;
+  const winner = document.getElementById("dodgeballWinner").value;
+  const message = document.getElementById("dodgeballMessage");
+
+  if (!teacherPassword) {
+    message.textContent = "⚠️ 먼저 선생님 인증을 해주세요.";
+    message.style.color = "red";
+    return;
+  }
+
+  if (!matchId || !winner) {
+    message.textContent = "⚠️ 경기 번호와 승리 학급을 모두 선택해 주세요.";
+    message.style.color = "red";
+    return;
+  }
+      const button = this;
+  button.disabled = true;
+  message.textContent = "저장 중...";
+  message.style.color = "#17243b";
+
+  try {
+    const response = await fetch(FUNCTION_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "save",
+        password: teacherPassword,
+        sport: "dodgeball",
+        match_id: matchId,
+        class_number: null,
+        result_value: null,
+        winner_class: Number(winner)
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || "저장 실패");
+    }
+
+    message.textContent = "✅ 피구 경기 결과 저장 완료!";
+    message.style.color = "green";
+  } catch (error) {
+    message.textContent = `⚠️ 저장 오류: ${error.message}`;
+    message.style.color = "red";
+  } finally {
+    button.disabled = false;
+  }
+});
+  // 2인 3각 학급별 기록 저장
 for (let classNum = 1; classNum <= 9; classNum++) {
   document.getElementById(`save-threeLegged-${classNum}`)
     .addEventListener("click", async function () {
