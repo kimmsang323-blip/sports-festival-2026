@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("Supabase 경기 결과:", results);
        renderMissionLiveRanking(results);
        renderRopeLiveRanking(results);
+       renderThreeLeggedLiveRanking(results);
 
     } catch (error) {
       console.error("경기 결과 불러오기 오류:", error);
@@ -39,6 +40,85 @@ document.addEventListener("DOMContentLoaded", function () {
      1. 하단 메뉴 화면 전환
   ========================= */
 
+   function renderThreeLeggedLiveRanking(results) {
+  const container = document.getElementById("threeLeggedLiveRanking");
+  if (!container) return;
+
+  const threeLeggedRecords = results.filter(record =>
+    record.sport === "threeLegged"
+  );
+
+  if (threeLeggedRecords.length === 0) {
+    container.textContent = "아직 입력된 경기 기록이 없습니다.";
+    return;
+  }
+        const classRecords = threeLeggedRecords
+    .filter(record =>
+      Number.isInteger(Number(record.class_number)) &&
+      Number(record.class_number) >= 1 &&
+      Number(record.class_number) <= 9 &&
+      record.match_id === `class_${record.class_number}` &&
+      Number.isFinite(Number(record.result_value)) &&
+      Number(record.result_value) > 0
+    )
+    .map(record => ({
+      classNum: Number(record.class_number),
+      time: Number(record.result_value)
+    }))
+    .sort((a, b) => a.time - b.time);
+        const scores = [120, 110, 100, 90, 80, 70, 60, 50, 40];
+
+  let rank = 0;
+  let previousTime = null;
+
+  const ranking = classRecords.map(record => {
+    if (previousTime === null || record.time !== previousTime) {
+      rank++;
+    }
+
+    previousTime = record.time;
+
+    return {
+      classNum: record.classNum,
+      time: record.time,
+      rank,
+      score: scores[rank - 1]
+    };
+  });
+        if (ranking.length === 0) {
+    container.textContent = "아직 입력된 경기 기록이 없습니다.";
+    return;
+  }
+
+  container.innerHTML = `
+    <p style="font-size:13px;color:#697386;">
+      기록 입력 현황: ${ranking.length}/9학급
+    </p>
+
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;text-align:center;">
+        <thead>
+          <tr>
+            <th>순위</th>
+            <th>학급</th>
+            <th>기록</th>
+            <th>점수</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${ranking.map(row => `
+            <tr>
+              <td>${row.rank}위</td>
+              <td>${row.classNum}반</td>
+              <td>${row.time.toFixed(2)}초</td>
+              <td>${row.score}점</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
    function renderRopeLiveRanking(results) {
   const container = document.getElementById("ropeLiveRanking");
   if (!container) return;
