@@ -360,7 +360,51 @@ document.getElementById("ropeRankingTable").innerHTML =
     console.error("8자 줄넘기 기록 불러오기 오류:", error);
   }
 }
+// 2인 3각 저장 기록 자동 불러오기
+async function loadThreeLeggedRecords() {
+  const SUPABASE_URL = "https://tdrebwaendjrwqcfforx.supabase.co";
 
+  // 공개용 API 키는 기존 설정을 사용
+  const SUPABASE_KEY = "sb_publishable_Y3k600Ij5iIlOFK8CNKhJg_WLevWGFo";
+
+  try {
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/festival_results?sport=eq.threeLegged&select=*`,
+      {
+        headers: {
+          apikey: SUPABASE_KEY
+        }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("2인 3각 기록 조회 실패");
+    }
+
+    const records = await response.json();
+
+    for (const record of records) {
+      const match = record.match_id.match(/^class_(\d+)$/);
+
+      if (!match) continue;
+
+      const classNum = Number(match[1]);
+
+      if (classNum < 1 || classNum > 9) continue;
+
+      const input = document.getElementById(
+        `threeLegged-${classNum}`
+      );
+
+      if (input) {
+        input.value = record.result_value;
+      }
+    }
+
+  } catch (error) {
+    console.error("2인 3각 기록 불러오기 오류:", error);
+  }
+}
 for (let classNum = 1; classNum <= 9; classNum++) {
   document.getElementById(`save-rope-${classNum}`)
     .addEventListener("click", async function () {
@@ -544,6 +588,7 @@ for (let classNum = 1; classNum <= 9; classNum++) {
 
         teacherPassword = password;
         loadRopeRecords();
+        loadThreeLeggedRecords();
         passwordInput.value = "";
         message.textContent = "인증 성공! 선생님 환영합니다. ✅";
         message.style.color = "green";
