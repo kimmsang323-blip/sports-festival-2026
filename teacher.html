@@ -251,7 +251,13 @@
           step="0.01"
           placeholder="예: 65.42"
         >
-
+<label style="display:block; margin:12px 0;">
+  <input
+    type="checkbox"
+    id="mission-bonus-${classNum}"
+  >
+  🏅 선생님 팀 승리 (+30점)
+</label>
         <button type="button" id="save-mission-${classNum}">
           💾 ${classNum}반 기록 저장
         </button>
@@ -489,6 +495,8 @@ async function loadMissionRecords() {
       if (input) {
         input.value = record.result_value;
       }
+      const bonusCheckbox = document.getElementById(`mission-bonus-${classNum}`);
+if (bonusCheckbox) bonusCheckbox.checked = Number(record.winner_class) === classNum;
     }
 
      updateMissionRanking(records);
@@ -536,7 +544,8 @@ function updateMissionRanking(records) {
       classNum: Number(record.class_number),
       time,
       rank,
-      score: scores[rank - 1]
+      bonus: Number(record.winner_class) === Number(record.class_number),
+score: scores[rank - 1] + (Number(record.winner_class) === Number(record.class_number) ? 30 : 0)
     };
   });
 
@@ -556,7 +565,7 @@ function updateMissionRanking(records) {
             <td>${row.rank}위</td>
             <td>${row.classNum}반</td>
             <td>${row.time.toFixed(2)}초</td>
-            <td>${row.score}점</td>
+            <td>${row.score}점${row.bonus ? " 🏅" : ""}</td>
           </tr>
         `).join("")}
       </tbody>
@@ -787,6 +796,8 @@ for (let classNum = 1; classNum <= 9; classNum++) {
       const message = document.getElementById(`mission-status-${classNum}`);
       const button = this;
       const seconds = Number(input.value);
+      const bonusCheckbox = document.getElementById(`mission-bonus-${classNum}`);
+const bonusWon = bonusCheckbox.checked;
 
       if (!teacherPassword) {
         message.textContent = "먼저 선생님 인증을 해주세요.";
@@ -822,7 +833,7 @@ for (let classNum = 1; classNum <= 9; classNum++) {
             match_id: `class_${classNum}`,
             class_number: classNum,
             result_value: seconds,
-            winner_class: null
+            winner_class: bonusWon ? classNum : null
           })
         });
 
