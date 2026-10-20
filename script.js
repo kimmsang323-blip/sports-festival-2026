@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
        renderRopeLiveRanking(results);
        renderThreeLeggedLiveRanking(results);
        renderDodgeballLiveResults(results);
+       renderDodgeballBracket(results);
 
     } catch (error) {
       console.error("경기 결과 불러오기 오류:", error);
@@ -141,6 +142,17 @@ document.addEventListener("DOMContentLoaded", function () {
       <span>🏆 ${record.winner_class}반 승리</span>
     </div>
   `).join("");
+}
+   function renderDodgeballBracket(results) {
+  const match1 = results.find(record =>
+    record.sport === "dodgeball" && String(record.match_id) === "1"
+  );
+  const team = document.getElementById("dodgeballMatch5Team1");
+  if (team) {
+    team.textContent = match1 && Number(match1.winner_class) >= 1 && Number(match1.winner_class) <= 9
+      ? `${match1.winner_class}반`
+      : "① 승리 학급";
+  }
 }
    function renderRopeLiveRanking(results) {
   const container = document.getElementById("ropeLiveRanking");
