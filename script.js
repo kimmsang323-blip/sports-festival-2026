@@ -153,6 +153,69 @@ document.addEventListener("DOMContentLoaded", function () {
       ? `${match1.winner_class}반`
       : "① 승리 학급";
   }
+        const match2 = results.find(record =>
+    record.sport === "dodgeball" && String(record.match_id) === "2"
+  );
+  const match3 = results.find(record =>
+    record.sport === "dodgeball" && String(record.match_id) === "3"
+  );
+
+  const team6Left = document.getElementById("dodgeballMatch6Team1");
+  const team6Right = document.getElementById("dodgeballMatch6Team2");
+
+  if (team6Left) {
+    team6Left.textContent = match3 && Number(match3.winner_class) >= 1 && Number(match3.winner_class) <= 9
+      ? `${match3.winner_class}반`
+      : "③ 승리 학급";
+  }
+
+  if (team6Right) {
+    team6Right.textContent = match2 && Number(match2.winner_class) >= 1 && Number(match2.winner_class) <= 9
+      ? `${match2.winner_class}반`
+      : "② 승리 학급";
+  }
+        const match4 = results.find(record =>
+    record.sport === "dodgeball" && String(record.match_id) === "4"
+  );
+  const match5 = results.find(record =>
+    record.sport === "dodgeball" && String(record.match_id) === "5"
+  );
+
+  const team7Left = document.getElementById("dodgeballMatch7Team1");
+  const team7Right = document.getElementById("dodgeballMatch7Team2");
+
+  if (team7Left) {
+    team7Left.textContent = match5 && Number(match5.winner_class) >= 1 && Number(match5.winner_class) <= 9
+      ? `${match5.winner_class}반`
+      : "⑤ 승리 학급";
+  }
+
+  if (team7Right) {
+    team7Right.textContent = match4 && Number(match4.winner_class) >= 1 && Number(match4.winner_class) <= 9
+      ? `${match4.winner_class}반`
+      : "④ 승리 학급";
+  }
+        const match6 = results.find(record =>
+    record.sport === "dodgeball" && String(record.match_id) === "6"
+  );
+  const match7 = results.find(record =>
+    record.sport === "dodgeball" && String(record.match_id) === "7"
+  );
+
+  const team8Left = document.getElementById("dodgeballMatch8Team1");
+  const team8Right = document.getElementById("dodgeballMatch8Team2");
+
+  if (team8Left) {
+    team8Left.textContent = match7 && Number(match7.winner_class) >= 1 && Number(match7.winner_class) <= 9
+      ? `${match7.winner_class}반`
+      : "⑦ 승리 학급";
+  }
+
+  if (team8Right) {
+    team8Right.textContent = match6 && Number(match6.winner_class) >= 1 && Number(match6.winner_class) <= 9
+      ? `${match6.winner_class}반`
+      : "⑥ 승리 학급";
+  }
 }
    function renderRopeLiveRanking(results) {
   const container = document.getElementById("ropeLiveRanking");
