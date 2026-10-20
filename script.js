@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const classRecords = missionRecords
     .filter(record =>
-      /^class_[1-9]$/.test(record.match_id) &&
+      record.match_id === `class_${record.class_number}` &&
       Number(record.result_value) > 0
     )
     .sort((a, b) =>
