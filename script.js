@@ -34,6 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
        renderDodgeballLiveResults(results);
        renderDodgeballBracket(results);
        renderTugBracket(results);
+       renderTugLiveResults(results);
 
     } catch (error) {
       console.error("경기 결과 불러오기 오류:", error);
@@ -144,6 +145,33 @@ document.addEventListener("DOMContentLoaded", function () {
     </div>
   `).join("");
 }
+   
+function renderTugLiveResults(results) {
+  const container = document.getElementById("tugLiveResults");
+  if (!container) return;
+
+  const tugRecords = results.filter(record =>
+    record.sport === "tug" &&
+    Number.isInteger(Number(record.winner_class)) &&
+    Number(record.winner_class) >= 1 &&
+    Number(record.winner_class) <= 9
+  );
+
+  if (tugRecords.length === 0) {
+    container.textContent = "아직 입력된 줄다리기 경기 결과가 없습니다.";
+    return;
+  }
+
+  tugRecords.sort((a, b) => Number(a.match_id) - Number(b.match_id));
+
+  container.innerHTML = tugRecords.map(record => `
+    <div style="padding:10px; border-bottom:1px solid #ddd;">
+      <strong>${record.match_id}경기</strong>
+      <span>🏆 ${record.winner_class}반 승리</span>
+    </div>
+  `).join("");
+}
+
    function renderDodgeballBracket(results) {
   const match1 = results.find(record =>
     record.sport === "dodgeball" && String(record.match_id) === "1"
