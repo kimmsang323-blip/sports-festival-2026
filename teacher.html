@@ -1191,6 +1191,24 @@ for (let classNum = 1; classNum <= 9; classNum++) {
         return;
       }
 
+      try {
+  const existing = await getExistingResult(
+    "threeLegged",
+    `class_${classNum}`
+  );
+
+  if (existing !== null) {
+    const confirmed = confirm(
+      `⚠️ ${classNum}반의 2인 3각 기록이 이미 저장되어 있습니다.\n\n기존 기록: ${existing.result_value}초\n새 기록: ${seconds}초\n\n기존 기록을 수정하시겠습니까?`
+    );
+
+    if (!confirmed) return;
+  }
+} catch (error) {
+  message.textContent = "기존 기록을 확인하지 못했습니다. 다시 시도해 주세요.";
+  message.style.color = "red";
+  return;
+}
       button.disabled = true;
       message.textContent = "기록 저장 중...";
       message.style.color = "#334155";
