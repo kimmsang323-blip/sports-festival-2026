@@ -1061,7 +1061,25 @@ if (!allowedWinners.includes(winner)) {
   return;
 }
       const button = this;
-  button.disabled = true;
+  try {
+  const existing = await getExistingResult(
+    "dodgeball",
+    matchId
+  );
+
+  if (existing !== null) {
+    const confirmed = confirm(
+      `⚠️ 피구 ${matchId}경기 결과가 이미 저장되어 있습니다.\n\n기존 승리 학급: ${existing.winner_class}반\n새 승리 학급: ${winner}반\n\n기존 결과를 수정하시겠습니까?`
+    );
+
+    if (!confirmed) return;
+  }
+} catch (error) {
+  message.textContent = "기존 경기 결과를 확인하지 못했습니다. 다시 시도해 주세요.";
+  message.style.color = "red";
+  return;
+}
+    button.disabled = true;
   message.textContent = "저장 중...";
   message.style.color = "#17243b";
 
