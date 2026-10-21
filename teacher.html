@@ -450,6 +450,30 @@ if (this.value === "5") {
 
   let teacherPassword = "";
   let teacherToken = localStorage.getItem("festivalTeacherToken") || "";
+  async function getExistingResult(sport, matchId) {
+  const url = "https://tdrebwaendjrwqcfforx.supabase.co";
+  const key = "sb_publishable_Y3k600Ij5iIlOFK8CNKhJg_WLevWGFo";
+
+  const params = new URLSearchParams({
+    sport: `eq.${sport}`,
+    match_id: `eq.${matchId}`,
+    select: "*"
+  });
+
+  const response = await fetch(
+    `${url}/rest/v1/festival_results?${params}`,
+    {
+      headers: { apikey: key }
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("기존 경기 기록 확인 실패");
+  }
+
+  const records = await response.json();
+  return records[0] || null;
+}
   async function loadRopeRecords() {
   const SUPABASE_URL = "https://tdrebwaendjrwqcfforx.supabase.co";
 
@@ -858,6 +882,30 @@ for (let classNum = 1; classNum <= 9; classNum++) {
         { number: 2, value: second }
       ];
 
+      try {
+  const existing = await Promise.all(
+    attempts
+      .filter(attempt => attempt.value !== "")
+      .map(attempt =>
+        getExistingResult(
+          "rope",
+          `class_${classNum}_attempt_${attempt.number}`
+        )
+      )
+  );
+
+  if (existing.some(record => record !== null)) {
+    const confirmed = confirm(
+      `⚠️ ${classNum}반의 줄넘기 기록이 이미 저장되어 있습니다.\n\n기존 기록을 수정하시겠습니까?`
+    );
+
+    if (!confirmed) return;
+  }
+} catch (error) {
+  message.textContent = "기존 기록을 확인하지 못했습니다. 다시 시도해 주세요.";
+  message.style.color = "red";
+  return;
+}
       button.disabled = true;
       message.style.color = "#17243b";
       message.textContent = "저장 중...";
