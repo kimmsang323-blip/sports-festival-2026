@@ -35,6 +35,21 @@ document.addEventListener("DOMContentLoaded", function () {
        renderDodgeballBracket(results);
        renderTugBracket(results);
        renderTugLiveResults(results);
+       
+      updateScoresFromResults(results);
+
+      applyTournamentScores(
+        results, "dodgeball", "dodgeball",
+        [100, 80, 60, 40]
+      );
+
+      applyTournamentScores(
+        results, "tug", "tug",
+        [130, 110, 90, 70]
+      );
+
+      renderScoreTable();
+
 
     } catch (error) {
       console.error("경기 결과 불러오기 오류:", error);
@@ -622,7 +637,161 @@ function renderTugBracket(results) {
      4. 총점 계산
   ========================= */
 
-  function calculateScores() {
+  
+   
+function updateScoresFromResults(results) {
+  const scores = [120, 110, 100, 90, 80, 70, 60, 50, 40];
+
+  // 이전 점수 초기화
+  classScores.forEach(team => {
+    team.rope = 0;
+    team.threeLegged = 0;
+    team.mission = 0;
+    team.dodgeball = 0;
+    team.tug = 0;
+  });
+
+  // 경기 기록에서 학급별 점수 계산
+  function applyRanking(sport, field, higherIsBetter) {
+    const records = results
+      .filter(record =>
+        record.sport === sport &&
+(sport !== "rope" || /^class_[1-9]_attempt_[12]$/.test(String(record.match_id))) &&
+(sport !== "mission" || /^class_[1-9]$/.test(String(record.match_id))) &&
+(sport !== "threeLegged" || /^class_[1-9]$/.test(String(record.match_id))) &&
+        Number(record.class_number) >= 1 &&
+        Number(record.class_number) <= 9 &&
+        record.result_value !== null &&
+        Number.isFinite(Number(record.result_value))
+      )
+      .map(record => ({
+        classNum: Number(record.class_number),
+        value: Number(record.result_value)
+      }));
+
+    const bestByClass = new Map();
+
+    records.forEach(record => {
+      const previous = bestByClass.get(record.classNum);
+
+      if (previous === undefined ||
+          (higherIsBetter
+            ? record.value > previous
+            : record.value < previous)) {
+        bestByClass.set(record.classNum, record.value);
+      }
+    });
+
+    const ranking = [...bestByClass.entries()]
+      .sort((a, b) =>
+        higherIsBetter ? b[1] - a[1] : a[1] - b[1]
+      );
+
+    let rank = 0;
+    let previousValue = null;
+
+    ranking.forEach(([classNum, value]) => {
+      if (previousValue === null || value !== previousValue) {
+        rank++;
+      }
+
+      previousValue = value;
+
+      classScores[classNum - 1][field] = scores[rank - 1] || 0;
+    });
+  }
+
+  applyRanking("rope", "rope", true);
+  applyRanking("threeLegged", "threeLegged", false);
+  applyRanking("mission", "mission", false);
+   
+  // 교사팀 기록보다 빠른 학급에 미션달리기 보너스 30점
+  const teacherRecord = results.find(record =>
+    record.sport === "mission" &&
+    String(record.match_id) === "teacher_team" &&
+    record.result_value !== null &&
+    Number.isFinite(Number(record.result_value)) &&
+    Number(record.result_value) > 0
+  );
+
+  if (teacherRecord) {
+    const teacherTime = Number(teacherRecord.result_value);
+
+    for (let classNum = 1; classNum <= 9; classNum++) {
+      const classRecord = results.find(record =>
+        record.sport === "mission" &&
+        String(record.match_id) === `class_${classNum}` &&
+        record.result_value !== null &&
+        Number.isFinite(Number(record.result_value)) &&
+        Number(record.result_value) > 0
+      );
+
+      if (classRecord && Number(classRecord.result_value) < teacherTime) {
+        classScores[classNum - 1].mission += 30;
+      }
+    }
+  }
+
+}
+
+   
+
+function applyTournamentScores(results, sport, field, points) {
+  const winners = {};
+
+  results
+    .filter(record => record.sport === sport)
+    .forEach(record => {
+      const winner = Number(record.winner_class);
+      if (winner >= 1 && winner <= 9) {
+        winners[String(record.match_id)] = winner;
+      }
+    });
+
+  // 결승 결과가 입력되면 최종 순위 점수 계산  
+if (![1, 2, 3, 4, 5, 6, 7, 8].every(match => winners[String(match)])) return;
+
+  const champion = winners["8"];
+
+  // 7경기와 6경기의 승자가 결승 진출
+  const finalists = [winners["7"], winners["6"]];
+  if (!finalists.includes(champion)) return;
+
+  const runnerUp = finalists.find(classNum => classNum !== champion);
+
+  // 7경기와 6경기에서 패배한 학급이 공동 3위
+  
+  
+  // 6경기 패배 학급
+  const match6Loser = winners["3"] === winners["6"]
+    ? winners["2"]
+    : winners["3"];
+
+  // 7경기 패배 학급
+  const match7Loser = winners["5"] === winners["7"]
+    ? winners["4"]
+    : winners["5"];
+
+  // 공동 3위
+  const semifinalLosers = [match6Loser, match7Loser];
+
+
+  classScores.forEach((team, index) => {
+    const classNum = index + 1;
+
+    if (classNum === champion) {
+      team[field] = points[0];
+    } else if (classNum === runnerUp) {
+      team[field] = points[1];
+    } else if (semifinalLosers.includes(classNum)) {
+      team[field] = points[2];
+    } else {
+      team[field] = points[3];
+    }
+  });
+}
+
+   function calculateScores() {
 
     classScores.forEach(team => {
 
