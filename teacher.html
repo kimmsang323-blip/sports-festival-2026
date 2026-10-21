@@ -833,7 +833,7 @@ for (let classNum = 1; classNum <= 9; classNum++) {
       const button = this;
       const message = document.getElementById(`rope-status-${classNum}`);
 
-      if (!teacherPassword) {
+      if (!teacherPassword && !teacherToken) {
         message.textContent = "먼저 선생님 인증을 해주세요.";
         message.style.color = "red";
         return;
@@ -992,7 +992,7 @@ if (matchId === "5") {
   const winner = document.getElementById("dodgeballWinner").value;
   const message = document.getElementById("dodgeballMessage");
 
-  if (!teacherPassword) {
+  if (!teacherPassword && !teacherToken) {
     message.textContent = "⚠️ 먼저 선생님 인증을 해주세요.";
     message.style.color = "red";
     return;
@@ -1053,7 +1053,7 @@ if (!allowedWinners.includes(winner)) {
   const winner = document.getElementById("tugWinner").value;
   const message = document.getElementById("tugMessage");
 
-  if (!teacherPassword) {
+  if (!teacherPassword && !teacherToken) {
     message.textContent = "⚠️ 먼저 선생님 인증을 해주세요.";
     message.style.color = "red";
     return;
@@ -1123,7 +1123,7 @@ for (let classNum = 1; classNum <= 9; classNum++) {
         `threeLegged-${classNum}`
       );
 
-      if (!teacherPassword) {
+      if (!teacherPassword && !teacherToken) {
         message.textContent = "먼저 선생님 인증을 해주세요.";
         message.style.color = "red";
         return;
@@ -1194,7 +1194,7 @@ for (let classNum = 1; classNum <= 9; classNum++) {
       const seconds = Number(input.value);
       
 
-      if (!teacherPassword) {
+      if (!teacherPassword && !teacherToken) {
         message.textContent = "먼저 선생님 인증을 해주세요.";
         message.style.color = "red";
         return;
