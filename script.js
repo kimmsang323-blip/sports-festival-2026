@@ -48,7 +48,8 @@ document.addEventListener("DOMContentLoaded", function () {
         [130, 110, 90, 70]
       );
 
-      renderScoreTable();
+      renderScoreTable();       
+renderTop3();
 
 
     } catch (error) {
