@@ -449,6 +449,7 @@ if (this.value === "5") {
     "https://tdrebwaendjrwqcfforx.supabase.co/functions/v1/festival-admin";
 
   let teacherPassword = "";
+  let teacherToken = localStorage.getItem("festivalTeacherToken") || "";
   async function loadRopeRecords() {
   const SUPABASE_URL = "https://tdrebwaendjrwqcfforx.supabase.co";
 
@@ -871,6 +872,7 @@ for (let classNum = 1; classNum <= 9; classNum++) {
             body: JSON.stringify({
               action: "save",
               password: teacherPassword,
+              token: teacherToken,
               sport: "rope",
               match_id: `class_${classNum}_attempt_${attempt.number}`,
               class_number: classNum,
@@ -1022,6 +1024,7 @@ if (!allowedWinners.includes(winner)) {
       body: JSON.stringify({
         action: "save",
         password: teacherPassword,
+        token: teacherToken,
         sport: "dodgeball",
         match_id: matchId,
         class_number: null,
@@ -1084,6 +1087,7 @@ if (!allowedWinners.includes(winner)) {
       body: JSON.stringify({
         action: "save",
         password: teacherPassword,
+        token: teacherToken,
         sport: "tug",
         match_id: matchId,
         class_number: null,
@@ -1152,6 +1156,7 @@ for (let classNum = 1; classNum <= 9; classNum++) {
           body: JSON.stringify({
             action: "save",
             password: teacherPassword,
+            token: teacherToken,
             sport: "threeLegged",
             match_id: `class_${classNum}`,
             class_number: classNum,
@@ -1219,6 +1224,7 @@ for (let classNum = 1; classNum <= 9; classNum++) {
           body: JSON.stringify({
             action: "save",
             password: teacherPassword,
+            token: teacherToken,
             sport: "mission",
             match_id: `class_${classNum}`,
             class_number: classNum,
@@ -1270,6 +1276,7 @@ for (let classNum = 1; classNum <= 9; classNum++) {
       body: JSON.stringify({
         action: "save",
         password: teacherPassword,
+        token: teacherToken,
         sport: "mission",
         match_id: "teacher_team",
         class_number: null,
@@ -1328,6 +1335,8 @@ for (let classNum = 1; classNum <= 9; classNum++) {
         }
 
         teacherPassword = password;
+        teacherToken = result.token;
+localStorage.setItem("festivalTeacherToken", teacherToken);
         loadRopeRecords();
         loadThreeLeggedRecords();
         loadMissionRecords();
@@ -1347,6 +1356,41 @@ document.getElementById("resultSection").style.display = "block";
       }
     }
   );
+  async function restoreTeacherLogin() {
+  if (!teacherToken) return;
+
+  try {
+    const response = await fetch(FUNCTION_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        action: "verify",
+        token: teacherToken
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error("인증 만료");
+    }
+
+    document.getElementById("loginForm").style.display = "none";
+    document.getElementById("resultSection").style.display = "block";
+
+    loadRopeRecords();
+    loadThreeLeggedRecords();
+    loadMissionRecords();
+
+  } catch (error) {
+    teacherToken = "";
+    localStorage.removeItem("festivalTeacherToken");
+  }
+}
+
+restoreTeacherLogin();
 </script>
 
 </body>
