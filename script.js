@@ -916,7 +916,6 @@ if (![1, 2, 3, 4, 5, 6, 7, 8].every(match => winners[String(match)])) return;
   ========================= */
 
   function renderTop3() {
-console.log("TOP3 함수 실행 확인");
 
     const ranking = calculateRanking();
 
